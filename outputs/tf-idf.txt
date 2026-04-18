@@ -16,7 +16,7 @@
 [DEBUG]: Total documents loaded: 210
 [DEBUG]: Loading metadata from /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/metadata.json
 [DEBUG]: Loaded metadata for 210 documents
-[DEBUG]: Inferred topics: {'Sports', 'Entertainment', 'International', 'General', 'Education', 'Health', 'Economy', 'Politics', 'Weather', 'Accidents', 'Security', 'Legal'}
+[DEBUG]: Inferred topics: {'Legal', 'General', 'Health', 'Entertainment', 'Weather', 'Politics', 'Economy', 'Accidents', 'International', 'Education', 'Security', 'Sports'}
 [DEBUG]: Topic distribution: {'Politics': 103, 'General': 48, 'Security': 30, 'Legal': 7, 'Economy': 10, 'Education': 1, 'Weather': 3, 'Accidents': 2, 'Sports': 1, 'Entertainment': 3, 'Health': 1, 'International': 1}
 [DEBUG]: Starting TF-IDF computation...
 [DEBUG]: Starting fit_transform on 210 documents
@@ -222,7 +222,7 @@ TOP-10 MOST DISCRIMINATIVE WORDS PER TOPIC
    9. تسلط                           (score: 0.030821)
   10. بیرو                           (score: 0.030821)
 
-[DEBUG]: Topic words saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/results/tfidf_topic_words.json
+[DEBUG]: Topic words saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/results/tf-idf_topic_words.json
 [DEBUG]: ========================================
 [DEBUG]: TF-IDF Weighting Module Completed
 [DEBUG]: ========================================

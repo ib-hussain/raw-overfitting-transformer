@@ -383,7 +383,7 @@ def main():
             print(f"  {i:2d}. {word:30s} (score: {score:.6f})")
     
     # Save topic words to file
-    topic_words_file = os.path.join(resultsDir, 'tfidf_topic_words.json')
+    topic_words_file = os.path.join(resultsDir, 'tf-idf_topic_words.json')
     with open(topic_words_file, 'w', encoding='utf-8') as f:
         # Convert to serializable format
         serializable = {topic: [[w, float(s)] for w, s in words] 
