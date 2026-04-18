@@ -1,0 +1,180 @@
+[DEBUG]: ========================================
+[DEBUG]: PPMI Weighting Module Started
+[DEBUG]: ========================================
+[DEBUG]: Configuration:
+[DEBUG]:   - DEBUG_MODE: 1
+[DEBUG]:   - PROCESSOR: cpu
+[DEBUG]:   - Device: cpu
+[DEBUG]:   - dataDir: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data
+[DEBUG]: Input file: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/cleaned.txt
+[DEBUG]: Output file: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/embeddings/ppmi_matrix.npy
+[DEBUG]: Loading documents from /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/cleaned.txt
+[DEBUG]: Loaded 210 documents
+[DEBUG]: Total documents loaded: 210
+[DEBUG]: Starting PPMI computation...
+[DEBUG]: Starting fit_transform on 210 documents
+[DEBUG]: Device: cpu
+[DEBUG]: Building vocabulary from 210 documents
+[DEBUG]: Max vocabulary size: 10000
+[DEBUG]: Processed 0 documents for vocabulary
+[DEBUG]: Processed 50 documents for vocabulary
+[DEBUG]: Processed 100 documents for vocabulary
+[DEBUG]: Processed 150 documents for vocabulary
+[DEBUG]: Processed 200 documents for vocabulary
+[DEBUG]: Vocabulary built with 4386 tokens
+[DEBUG]: Top 20 most frequent tokens: ['کے', 'کی', 'میں', 'سے', 'اور', 'کا', 'کو', 'کہ', 'نے', 'پر', 'اس', '<NUM>', 'ایک', 'ہے', 'پاکستان', 'کر', 'ہو', 'ہے۔', 'یہ', 'ان']
+[DEBUG]: Building co-occurrence matrix with window size 5
+[DEBUG]: Processed document 0, total tokens: 188
+[DEBUG]: Processed document 50, total tokens: 8392
+[DEBUG]: Processed document 100, total tokens: 16767
+[DEBUG]: Processed document 150, total tokens: 25194
+[DEBUG]: Processed document 200, total tokens: 32953
+[DEBUG]: Co-occurrence matrix built
+[DEBUG]: Matrix shape: torch.Size([4386, 4386])
+[DEBUG]: Total tokens processed: 34138
+[DEBUG]: Non-zero elements: 175206
+[DEBUG]: Total co-occurrence sum: 335080
+[DEBUG]: Computing PPMI matrix
+[DEBUG]: Total co-occurrence sum: 335080
+[DEBUG]: Word probabilities computed
+[DEBUG]: Min word prob: 0.000015
+[DEBUG]: Max word prob: 0.050251
+[DEBUG]: Computed PPMI for row 0/4386
+[DEBUG]: Computed PPMI for row 1000/4386
+[DEBUG]: Computed PPMI for row 2000/4386
+[DEBUG]: Computed PPMI for row 3000/4386
+[DEBUG]: Computed PPMI for row 4000/4386
+[DEBUG]: PPMI matrix computed
+[DEBUG]: PPMI matrix - non-zero elements: 160797
+[DEBUG]: PPMI matrix - max value: 12.9886
+[DEBUG]: PPMI matrix - mean value: 0.0339
+[DEBUG]: PPMI matrix saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/embeddings/ppmi_matrix.npy
+[DEBUG]: Matrix shape: (4386, 4386)
+[DEBUG]: Matrix size: 73.38 MB
+
+============================================================
+CREATING t-SNE VISUALIZATION
+============================================================
+[DEBUG]: Creating t-SNE visualization for top 200 words
+[DEBUG]: Applying t-SNE...
+[DEBUG]: t-SNE visualization saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/figures/tsne_visualization.png
+t-SNE visualization saved to: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/figures/tsne_visualization.png
+
+============================================================
+TOP-5 NEAREST NEIGHBORS BY COSINE SIMILARITY
+============================================================
+[DEBUG]: Finding nearest neighbors for 12 query words
+[DEBUG]: Found neighbors for 'پاکستان'
+[DEBUG]: Found neighbors for 'حکومت'
+[DEBUG]: Found neighbors for 'وزیر'
+[DEBUG]: Found neighbors for 'کرکٹ'
+[DEBUG]: Found neighbors for 'پولیس'
+[DEBUG]: Found neighbors for 'عدالت'
+[DEBUG]: Found neighbors for 'امریکہ'
+[DEBUG]: Found neighbors for 'انڈیا'
+[DEBUG]: Found neighbors for 'عمران'
+[DEBUG]: Found neighbors for 'فوج'
+[DEBUG]: Found neighbors for 'معیشت'
+[DEBUG]: Found neighbors for 'تعلیم'
+
+[Query: پاکستان]
+----------------------------------------
+  1. کے                   (similarity: 0.2352)
+  2. کی                   (similarity: 0.2086)
+  3. میں                  (similarity: 0.2075)
+  4. نے                   (similarity: 0.1841)
+  5. انٹرنیشنل            (similarity: 0.1793)
+
+[Query: حکومت]
+----------------------------------------
+  1. طالبان               (similarity: 0.1877)
+  2. برطانوی              (similarity: 0.1748)
+  3. نے                   (similarity: 0.1723)
+  4. صوبا                 (similarity: 0.1663)
+  5. تہوار                (similarity: 0.1651)
+
+[Query: وزیر]
+----------------------------------------
+  1. اعظم                 (similarity: 0.5561)
+  2. اعلی                 (similarity: 0.3126)
+  3. سابق                 (similarity: 0.2973)
+  4. خارجہ                (similarity: 0.2643)
+  5. مملکت                (similarity: 0.2067)
+
+[Query: کرکٹ]
+----------------------------------------
+  1. مبصر                 (similarity: 0.4396)
+  2. مصنف                 (similarity: 0.3692)
+  3. سلوگن                (similarity: 0.3434)
+  4. قریشی                (similarity: 0.2444)
+  5. انتقال               (similarity: 0.2327)
+
+[Query: پولیس]
+----------------------------------------
+  1. کمشنر                (similarity: 0.2248)
+  2. افسر                 (similarity: 0.2056)
+  3. ہیریسن،              (similarity: 0.2036)
+  4. جیل،                 (similarity: 0.2025)
+  5. میونسپل              (similarity: 0.1688)
+
+[Query: عدالت]
+----------------------------------------
+  1. نے                   (similarity: 0.2037)
+  2. کورٹ                 (similarity: 0.1972)
+  3. ملزم                 (similarity: 0.1950)
+  4. ضمانت                (similarity: 0.1897)
+  5. سزا                  (similarity: 0.1846)
+
+[Query: امریکہ]
+----------------------------------------
+  1. جوہری                (similarity: 0.2268)
+  2. اتحادی               (similarity: 0.2029)
+  3. جانب،                (similarity: 0.1972)
+  4. یوکرین،              (similarity: 0.1873)
+  5. عراق                 (similarity: 0.1797)
+
+[Query: انڈیا]
+----------------------------------------
+  1. شکسگام               (similarity: 0.2021)
+  2. ایڈیٹر               (similarity: 0.1832)
+  3. مختصر                (similarity: 0.1785)
+  4. پاکستان              (similarity: 0.1756)
+  5. ویلی                 (similarity: 0.1674)
+
+[Query: عمران]
+----------------------------------------
+  1. خان                  (similarity: 0.5009)
+  2. شمائلہ               (similarity: 0.2923)
+  3. فاروق                (similarity: 0.2411)
+  4. جیل                  (similarity: 0.2392)
+  5. ٹراوزر               (similarity: 0.2340)
+
+[Query: فوج]
+----------------------------------------
+  1. پاکستا               (similarity: 0.2731)
+  2. شعبہ                 (similarity: 0.2188)
+  3. اگرچہ                (similarity: 0.2043)
+  4. گھیرے                (similarity: 0.2023)
+  5. ترجمان               (similarity: 0.2004)
+
+[Query: معیشت]
+----------------------------------------
+  1. عروج                 (similarity: 0.6886)
+  2. پذیر                 (similarity: 0.6474)
+  3. ترقی                 (similarity: 0.6354)
+  4. بہتری،               (similarity: 0.5738)
+  5. کنٹینرز              (similarity: 0.4860)
+
+[Query: تعلیم]
+----------------------------------------
+  1. اعلی                 (similarity: 0.3404)
+  2. حنفی                 (similarity: 0.2658)
+  3. روزگار               (similarity: 0.2638)
+  4. ندا                  (similarity: 0.2564)
+  5. میٹرک                (similarity: 0.2406)
+
+[DEBUG]: Nearest neighbors saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/results/ppmi_nearest_neighbors.json
+[DEBUG]: Vocabulary and categories saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/results/ppmi_vocab_categories.json
+[DEBUG]: ========================================
+[DEBUG]: PPMI Weighting Module Completed
+[DEBUG]: ========================================

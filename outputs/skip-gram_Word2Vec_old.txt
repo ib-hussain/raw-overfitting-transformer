@@ -1,0 +1,267 @@
+[DEBUG]: ========================================
+[DEBUG]: Skip-gram Word2Vec Module Started
+[DEBUG]: ========================================
+[DEBUG]: Configuration:
+[DEBUG]:   - DEBUG_MODE: 1
+[DEBUG]:   - PROCESSOR: cpu
+[DEBUG]:   - Device: cpu
+[DEBUG]:   - Embedding dim: 100
+[DEBUG]:   - Window size: 5
+[DEBUG]:   - Negative samples: 10
+[DEBUG]:   - Batch size: 1024
+[DEBUG]:   - Epochs: 50
+[DEBUG]:   - Learning rate: 0.001
+[DEBUG]: Loading documents from /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/cleaned.txt
+[DEBUG]: Loaded 210 documents
+[DEBUG]: Building vocabulary (min_freq=5, max_vocab=10000)
+[DEBUG]: Processed 0 documents for vocabulary
+[DEBUG]: Processed 50 documents for vocabulary
+[DEBUG]: Processed 100 documents for vocabulary
+[DEBUG]: Processed 150 documents for vocabulary
+[DEBUG]: Processed 200 documents for vocabulary
+[DEBUG]: Vocabulary built with 1033 tokens
+[DEBUG]: Top 20 most frequent: ['<UNK>', 'کے', 'کی', 'میں', 'سے', 'اور', 'کا', 'کو', 'کہ', 'نے', 'پر', 'اس', '<NUM>', 'ایک', 'ہے', 'پاکستان', 'کر', 'ہو', 'ہے۔', 'یہ']
+[DEBUG]: Vocabulary saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/results/w2v_vocab.json
+[DEBUG]: Creating Skip-gram training pairs...
+[DEBUG]: Processed document 0, total pairs: 1850
+[DEBUG]: Processed document 50, total pairs: 82390
+[DEBUG]: Processed document 100, total pairs: 164640
+[DEBUG]: Processed document 150, total pairs: 247410
+[DEBUG]: Processed document 200, total pairs: 323500
+[DEBUG]: Total training pairs created: 335080
+[DEBUG]: SkipGramWord2Vec initialized
+[DEBUG]:   - Vocab size: 1033
+[DEBUG]:   - Embedding dim: 100
+[DEBUG]:   - Center embeddings shape: torch.Size([1033, 100])
+[DEBUG]:   - Context embeddings shape: torch.Size([1033, 100])
+[DEBUG]: Negative sampler initialized
+[DEBUG]:   - Noise distribution computed
+[DEBUG]:   - Sum of probabilities: 1.0000
+[DEBUG]:   - Max prob: 0.026122, Min prob: 0.000000
+
+============================================================
+TRAINING SKIP-GRAM WORD2VEC
+============================================================
+Vocabulary size: 1033
+Training pairs: 335080
+Batches per epoch: 328
+============================================================
+
+[DEBUG]: Starting training...
+[DEBUG]:   - Epochs: 50
+[DEBUG]:   - Batches per epoch: 328
+[DEBUG]:   - Negative samples: 10
+[DEBUG]: Epoch 1, Batch 100, Loss: 4.0130
+[DEBUG]: Epoch 1, Batch 200, Loss: 2.9374
+[DEBUG]: Epoch 1, Batch 300, Loss: 2.8956
+Epoch 1/50 completed - Avg Loss: 4.0442 - Time: 17.91s
+[DEBUG]: Epoch 2, Batch 100, Loss: 2.8467
+[DEBUG]: Epoch 2, Batch 200, Loss: 2.9066
+[DEBUG]: Epoch 2, Batch 300, Loss: 2.8485
+Epoch 2/50 completed - Avg Loss: 2.8776 - Time: 34.30s
+[DEBUG]: Epoch 3, Batch 100, Loss: 2.9172
+[DEBUG]: Epoch 3, Batch 200, Loss: 2.8818
+[DEBUG]: Epoch 3, Batch 300, Loss: 2.8940
+Epoch 3/50 completed - Avg Loss: 2.8732 - Time: 49.94s
+[DEBUG]: Epoch 4, Batch 100, Loss: 2.8614
+[DEBUG]: Epoch 4, Batch 200, Loss: 2.8182
+[DEBUG]: Epoch 4, Batch 300, Loss: 2.8293
+Epoch 4/50 completed - Avg Loss: 2.8725 - Time: 65.49s
+[DEBUG]: Epoch 5, Batch 100, Loss: 2.8920
+[DEBUG]: Epoch 5, Batch 200, Loss: 2.8495
+[DEBUG]: Epoch 5, Batch 300, Loss: 2.8424
+Epoch 5/50 completed - Avg Loss: 2.8710 - Time: 81.05s
+[DEBUG]: Epoch 6, Batch 100, Loss: 2.8831
+[DEBUG]: Epoch 6, Batch 200, Loss: 2.8468
+[DEBUG]: Epoch 6, Batch 300, Loss: 2.8680
+Epoch 6/50 completed - Avg Loss: 2.8650 - Time: 96.44s
+[DEBUG]: Epoch 7, Batch 100, Loss: 2.8340
+[DEBUG]: Epoch 7, Batch 200, Loss: 2.8549
+[DEBUG]: Epoch 7, Batch 300, Loss: 2.8038
+Epoch 7/50 completed - Avg Loss: 2.8519 - Time: 112.39s
+[DEBUG]: Epoch 8, Batch 100, Loss: 2.8441
+[DEBUG]: Epoch 8, Batch 200, Loss: 2.8413
+[DEBUG]: Epoch 8, Batch 300, Loss: 2.8424
+Epoch 8/50 completed - Avg Loss: 2.8321 - Time: 128.17s
+[DEBUG]: Epoch 9, Batch 100, Loss: 2.8658
+[DEBUG]: Epoch 9, Batch 200, Loss: 2.8084
+[DEBUG]: Epoch 9, Batch 300, Loss: 2.8135
+Epoch 9/50 completed - Avg Loss: 2.8120 - Time: 144.60s
+[DEBUG]: Epoch 10, Batch 100, Loss: 2.7614
+[DEBUG]: Epoch 10, Batch 200, Loss: 2.8418
+[DEBUG]: Epoch 10, Batch 300, Loss: 2.7896
+Epoch 10/50 completed - Avg Loss: 2.7917 - Time: 160.05s
+[DEBUG]: Epoch 11, Batch 100, Loss: 2.8057
+[DEBUG]: Epoch 11, Batch 200, Loss: 2.7745
+[DEBUG]: Epoch 11, Batch 300, Loss: 2.7298
+Epoch 11/50 completed - Avg Loss: 2.7727 - Time: 176.32s
+[DEBUG]: Epoch 12, Batch 100, Loss: 2.8028
+[DEBUG]: Epoch 12, Batch 200, Loss: 2.7552
+[DEBUG]: Epoch 12, Batch 300, Loss: 2.7384
+Epoch 12/50 completed - Avg Loss: 2.7535 - Time: 192.21s
+[DEBUG]: Epoch 13, Batch 100, Loss: 2.6665
+[DEBUG]: Epoch 13, Batch 200, Loss: 2.7266
+[DEBUG]: Epoch 13, Batch 300, Loss: 2.7042
+Epoch 13/50 completed - Avg Loss: 2.7356 - Time: 207.13s
+[DEBUG]: Epoch 14, Batch 100, Loss: 2.6864
+[DEBUG]: Epoch 14, Batch 200, Loss: 2.7780
+[DEBUG]: Epoch 14, Batch 300, Loss: 2.7290
+Epoch 14/50 completed - Avg Loss: 2.7201 - Time: 222.68s
+[DEBUG]: Epoch 15, Batch 100, Loss: 2.6972
+[DEBUG]: Epoch 15, Batch 200, Loss: 2.6676
+[DEBUG]: Epoch 15, Batch 300, Loss: 2.7261
+Epoch 15/50 completed - Avg Loss: 2.7046 - Time: 239.30s
+[DEBUG]: Epoch 16, Batch 100, Loss: 2.6460
+[DEBUG]: Epoch 16, Batch 200, Loss: 2.7270
+[DEBUG]: Epoch 16, Batch 300, Loss: 2.7104
+Epoch 16/50 completed - Avg Loss: 2.6904 - Time: 255.62s
+[DEBUG]: Epoch 17, Batch 100, Loss: 2.6387
+[DEBUG]: Epoch 17, Batch 200, Loss: 2.6204
+[DEBUG]: Epoch 17, Batch 300, Loss: 2.6811
+Epoch 17/50 completed - Avg Loss: 2.6780 - Time: 271.94s
+[DEBUG]: Epoch 18, Batch 100, Loss: 2.6383
+[DEBUG]: Epoch 18, Batch 200, Loss: 2.5942
+[DEBUG]: Epoch 18, Batch 300, Loss: 2.6526
+Epoch 18/50 completed - Avg Loss: 2.6647 - Time: 288.08s
+[DEBUG]: Epoch 19, Batch 100, Loss: 2.6041
+[DEBUG]: Epoch 19, Batch 200, Loss: 2.6700
+[DEBUG]: Epoch 19, Batch 300, Loss: 2.6513
+Epoch 19/50 completed - Avg Loss: 2.6530 - Time: 307.39s
+[DEBUG]: Epoch 20, Batch 100, Loss: 2.5955
+[DEBUG]: Epoch 20, Batch 200, Loss: 2.7010
+[DEBUG]: Epoch 20, Batch 300, Loss: 2.6313
+Epoch 20/50 completed - Avg Loss: 2.6430 - Time: 326.30s
+[DEBUG]: Epoch 21, Batch 100, Loss: 2.6588
+[DEBUG]: Epoch 21, Batch 200, Loss: 2.6593
+[DEBUG]: Epoch 21, Batch 300, Loss: 2.6311
+Epoch 21/50 completed - Avg Loss: 2.6322 - Time: 344.28s
+[DEBUG]: Epoch 22, Batch 100, Loss: 2.6265
+[DEBUG]: Epoch 22, Batch 200, Loss: 2.5965
+[DEBUG]: Epoch 22, Batch 300, Loss: 2.6711
+Epoch 22/50 completed - Avg Loss: 2.6236 - Time: 362.00s
+[DEBUG]: Epoch 23, Batch 100, Loss: 2.6470
+[DEBUG]: Epoch 23, Batch 200, Loss: 2.6453
+[DEBUG]: Epoch 23, Batch 300, Loss: 2.6286
+Epoch 23/50 completed - Avg Loss: 2.6143 - Time: 382.26s
+[DEBUG]: Epoch 24, Batch 100, Loss: 2.6074
+[DEBUG]: Epoch 24, Batch 200, Loss: 2.5884
+[DEBUG]: Epoch 24, Batch 300, Loss: 2.5174
+Epoch 24/50 completed - Avg Loss: 2.6059 - Time: 401.19s
+[DEBUG]: Epoch 25, Batch 100, Loss: 2.5671
+[DEBUG]: Epoch 25, Batch 200, Loss: 2.5701
+[DEBUG]: Epoch 25, Batch 300, Loss: 2.6033
+Epoch 25/50 completed - Avg Loss: 2.5979 - Time: 416.88s
+[DEBUG]: Epoch 26, Batch 100, Loss: 2.6034
+[DEBUG]: Epoch 26, Batch 200, Loss: 2.6030
+[DEBUG]: Epoch 26, Batch 300, Loss: 2.5997
+Epoch 26/50 completed - Avg Loss: 2.5896 - Time: 432.58s
+[DEBUG]: Epoch 27, Batch 100, Loss: 2.5293
+[DEBUG]: Epoch 27, Batch 200, Loss: 2.5993
+[DEBUG]: Epoch 27, Batch 300, Loss: 2.6222
+Epoch 27/50 completed - Avg Loss: 2.5823 - Time: 449.90s
+[DEBUG]: Epoch 28, Batch 100, Loss: 2.5590
+[DEBUG]: Epoch 28, Batch 200, Loss: 2.5801
+[DEBUG]: Epoch 28, Batch 300, Loss: 2.5795
+Epoch 28/50 completed - Avg Loss: 2.5748 - Time: 467.80s
+[DEBUG]: Epoch 29, Batch 100, Loss: 2.5396
+[DEBUG]: Epoch 29, Batch 200, Loss: 2.6203
+[DEBUG]: Epoch 29, Batch 300, Loss: 2.5536
+Epoch 29/50 completed - Avg Loss: 2.5682 - Time: 488.63s
+[DEBUG]: Epoch 30, Batch 100, Loss: 2.5522
+[DEBUG]: Epoch 30, Batch 200, Loss: 2.5462
+[DEBUG]: Epoch 30, Batch 300, Loss: 2.5972
+Epoch 30/50 completed - Avg Loss: 2.5607 - Time: 508.54s
+[DEBUG]: Epoch 31, Batch 100, Loss: 2.5489
+[DEBUG]: Epoch 31, Batch 200, Loss: 2.5416
+[DEBUG]: Epoch 31, Batch 300, Loss: 2.5262
+Epoch 31/50 completed - Avg Loss: 2.5546 - Time: 529.09s
+[DEBUG]: Epoch 32, Batch 100, Loss: 2.5505
+[DEBUG]: Epoch 32, Batch 200, Loss: 2.5407
+[DEBUG]: Epoch 32, Batch 300, Loss: 2.5174
+Epoch 32/50 completed - Avg Loss: 2.5482 - Time: 549.20s
+[DEBUG]: Epoch 33, Batch 100, Loss: 2.5729
+[DEBUG]: Epoch 33, Batch 200, Loss: 2.5290
+[DEBUG]: Epoch 33, Batch 300, Loss: 2.5372
+Epoch 33/50 completed - Avg Loss: 2.5419 - Time: 567.60s
+[DEBUG]: Epoch 34, Batch 100, Loss: 2.5643
+[DEBUG]: Epoch 34, Batch 200, Loss: 2.5041
+[DEBUG]: Epoch 34, Batch 300, Loss: 2.4631
+Epoch 34/50 completed - Avg Loss: 2.5357 - Time: 587.19s
+[DEBUG]: Epoch 35, Batch 100, Loss: 2.5378
+[DEBUG]: Epoch 35, Batch 200, Loss: 2.5750
+[DEBUG]: Epoch 35, Batch 300, Loss: 2.5298
+Epoch 35/50 completed - Avg Loss: 2.5299 - Time: 604.94s
+[DEBUG]: Epoch 36, Batch 100, Loss: 2.4857
+[DEBUG]: Epoch 36, Batch 200, Loss: 2.4761
+[DEBUG]: Epoch 36, Batch 300, Loss: 2.5473
+Epoch 36/50 completed - Avg Loss: 2.5239 - Time: 622.78s
+[DEBUG]: Epoch 37, Batch 100, Loss: 2.4947
+[DEBUG]: Epoch 37, Batch 200, Loss: 2.4822
+[DEBUG]: Epoch 37, Batch 300, Loss: 2.5305
+Epoch 37/50 completed - Avg Loss: 2.5199 - Time: 642.51s
+[DEBUG]: Epoch 38, Batch 100, Loss: 2.5815
+[DEBUG]: Epoch 38, Batch 200, Loss: 2.5193
+[DEBUG]: Epoch 38, Batch 300, Loss: 2.5431
+Epoch 38/50 completed - Avg Loss: 2.5137 - Time: 662.72s
+[DEBUG]: Epoch 39, Batch 100, Loss: 2.5570
+[DEBUG]: Epoch 39, Batch 200, Loss: 2.5545
+[DEBUG]: Epoch 39, Batch 300, Loss: 2.5180
+Epoch 39/50 completed - Avg Loss: 2.5091 - Time: 683.38s
+[DEBUG]: Epoch 40, Batch 100, Loss: 2.5121
+[DEBUG]: Epoch 40, Batch 200, Loss: 2.4884
+[DEBUG]: Epoch 40, Batch 300, Loss: 2.5244
+Epoch 40/50 completed - Avg Loss: 2.5040 - Time: 702.65s
+[DEBUG]: Epoch 41, Batch 100, Loss: 2.5230
+[DEBUG]: Epoch 41, Batch 200, Loss: 2.5017
+[DEBUG]: Epoch 41, Batch 300, Loss: 2.4959
+Epoch 41/50 completed - Avg Loss: 2.4995 - Time: 718.97s
+[DEBUG]: Epoch 42, Batch 100, Loss: 2.4958
+[DEBUG]: Epoch 42, Batch 200, Loss: 2.4194
+[DEBUG]: Epoch 42, Batch 300, Loss: 2.4739
+Epoch 42/50 completed - Avg Loss: 2.4952 - Time: 734.89s
+[DEBUG]: Epoch 43, Batch 100, Loss: 2.4729
+[DEBUG]: Epoch 43, Batch 200, Loss: 2.4916
+[DEBUG]: Epoch 43, Batch 300, Loss: 2.4788
+Epoch 43/50 completed - Avg Loss: 2.4906 - Time: 751.08s
+[DEBUG]: Epoch 44, Batch 100, Loss: 2.5135
+[DEBUG]: Epoch 44, Batch 200, Loss: 2.5148
+[DEBUG]: Epoch 44, Batch 300, Loss: 2.4645
+Epoch 44/50 completed - Avg Loss: 2.4858 - Time: 768.72s
+[DEBUG]: Epoch 45, Batch 100, Loss: 2.4731
+[DEBUG]: Epoch 45, Batch 200, Loss: 2.4951
+[DEBUG]: Epoch 45, Batch 300, Loss: 2.5153
+Epoch 45/50 completed - Avg Loss: 2.4820 - Time: 785.91s
+[DEBUG]: Epoch 46, Batch 100, Loss: 2.4959
+[DEBUG]: Epoch 46, Batch 200, Loss: 2.4913
+[DEBUG]: Epoch 46, Batch 300, Loss: 2.4831
+Epoch 46/50 completed - Avg Loss: 2.4783 - Time: 802.56s
+[DEBUG]: Epoch 47, Batch 100, Loss: 2.4988
+[DEBUG]: Epoch 47, Batch 200, Loss: 2.4644
+[DEBUG]: Epoch 47, Batch 300, Loss: 2.5352
+Epoch 47/50 completed - Avg Loss: 2.4748 - Time: 821.16s
+[DEBUG]: Epoch 48, Batch 100, Loss: 2.5053
+[DEBUG]: Epoch 48, Batch 200, Loss: 2.4449
+[DEBUG]: Epoch 48, Batch 300, Loss: 2.4476
+Epoch 48/50 completed - Avg Loss: 2.4710 - Time: 839.50s
+[DEBUG]: Epoch 49, Batch 100, Loss: 2.4321
+[DEBUG]: Epoch 49, Batch 200, Loss: 2.4724
+[DEBUG]: Epoch 49, Batch 300, Loss: 2.4518
+Epoch 49/50 completed - Avg Loss: 2.4655 - Time: 855.71s
+[DEBUG]: Epoch 50, Batch 100, Loss: 2.4428
+[DEBUG]: Epoch 50, Batch 200, Loss: 2.4784
+[DEBUG]: Epoch 50, Batch 300, Loss: 2.4245
+Epoch 50/50 completed - Avg Loss: 2.4628 - Time: 871.43s
+[DEBUG]: Training completed
+[DEBUG]:   - Total time: 871.43s
+[DEBUG]:   - Final loss: 2.4176
+[DEBUG]: Model saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/models/skipgram_word2vec.pth
+
+Embeddings saved to: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/embeddings/embeddings_w2v.npy
+Embeddings shape: (1033, 100)
+[DEBUG]: Loss curve saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/figures/w2v_loss_curve.png
+Loss curve saved to: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/figures/w2v_loss_curve.png
+Epoch loss curve saved to: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/figures/w2v_epoch_loss.png
+[DEBUG]: Training stats saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/results/w2v_training_stats.json
+[DEBUG]: ========================================
+[DEBUG]: Skip-gram Word2Vec Module Completed
+[DEBUG]: ========================================
