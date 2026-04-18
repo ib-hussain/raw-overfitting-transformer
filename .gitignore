@@ -1,0 +1,143 @@
+
+# ── OS & editor noise ───────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.vsix
+*.code-workspace
+
+# ── Python byte-compiled / optimised ────────────────────
+__pycache__/
+*.whl
+*.egg-info/
+*.egg
+None/
+*.py[codz]
+*$py.class
+*.so
+cython_debug/
+jawwad_bhai.pem
+
+# ── Virtual environments ─────────────────────────────────
+.Python
+.env
+.envrc
+.venv
+env/
+*venv*/
+ENV/
+env.bak/
+venv.bak/
+venv_windows/
+.pixi
+__pypackages__/
+.pdm-python
+.pdm-build/
+
+# ── Distribution / packaging ─────────────────────────────
+build/
+dist/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.spec
+*.manifest
+.python-version
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Testing & coverage ───────────────────────────────────
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# ── Type checkers & linters ──────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+.pypirc
+
+# ── Jupyter / IPython ────────────────────────────────────
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# ── Project-specific: ML experiment outputs ──────────────
+# Generated outputs – never commit these; they can be large
+**/*experiment_log*.txt
+**/*_week_*.csv
+**/*_week_*.npy
+**/output/
+# **/prediction/
+**/old_simulations/
+multivariate-time-series-data/
+# models*/
+runs*/
+# figs*/
+
+
+# ── Project-specific: data files ─────────────────────────
+data/Huge Stock Market Dataset/
+data/data_FRED/
+data/TradingAgents/
+Data2/
+
+# ── Project-specific: misc tool artefacts ────────────────
+assignment2work/LSTM/test_prediction/
+assignment2work/ticker-collector/.ipynb_checkpoints/
+assignment2work/paper-metric-reporter/.spyproject/
+assignment2work/paper-metric-reporter/**/*.ini
+.spyproject/
+.streamlit/
+ignore/
+*ignore*.*
+
+# ── Secrets & config ─────────────────────────────────────
+*.env
+# Keep .toml tracked (pyproject.toml etc.) – add specific
+# secret toml names below if needed:
+# secrets.toml
+
+# ── Misc ─────────────────────────────────────────────────
+*.tmp
+*.log
+*.zip
+*.rdb
+*.aof
+*.pid
+*.mo
+*.pot
+*.pyc
+*.pyo
+*.pyd
+marimo/_static/
+marimo/_lsp/
+__marimo__/
+docs/_build/
+/site
