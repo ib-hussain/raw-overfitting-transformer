@@ -459,7 +459,7 @@ def main():
     if DEBUG_MODE:
         print(f"[DEBUG]: Training stats saved to {stats_file}")
         print("[DEBUG]: ========================================")
-        print("[DEBUG]: Skip-gram Word2Vec Module Completed")
+        print("[DEBUG]: Skip-gram Word2Vec(Old) Module Completed")
         print("[DEBUG]: ========================================")
     
     return embeddings, model

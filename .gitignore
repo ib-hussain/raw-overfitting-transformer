@@ -9,6 +9,7 @@ Thumbs.db
 
 # ── Python byte-compiled / optimised ────────────────────
 __pycache__/
+models/
 *.whl
 *.egg-info/
 *.egg

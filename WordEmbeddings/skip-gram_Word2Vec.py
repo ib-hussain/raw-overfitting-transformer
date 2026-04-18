@@ -27,14 +27,15 @@ figuresDir = os.getenv('figuresDir', './figures')
 # Set device
 device = torch.device(PROCESSOR if torch.cuda.is_available() and PROCESSOR == "cuda" else "cpu")
 
-# Hyperparameters
+# Hyperparameters - SCALED UP FOR BETTER PERFORMANCE
 EMBEDDING_DIM = 100  # d
 WINDOW_SIZE = 5      # k
 NEGATIVE_SAMPLES = 10  # K
-BATCH_SIZE = 1024
-EPOCHS = 50  # Can be adjusted based on training time
+BATCH_SIZE = 2048  # Doubled from 1024
+EPOCHS = 100  # Doubled from 50
 LEARNING_RATE = 0.001
 MIN_FREQ = 5  # Minimum frequency to include in vocabulary
+CHECKPOINT_INTERVAL = 10  # Save checkpoint every N epochs
 
 
 class SkipGramDataset(Dataset):
@@ -167,7 +168,6 @@ class NegativeSampler:
         self.vocab = vocab
         
         # Compute noise distribution: Pn(w) ∝ f(w)^(3/4)
-        # word_counts is a Counter object with word -> frequency mapping
         freqs = np.array([word_counts.get(word, 0) for word in vocab])
         freqs = freqs ** 0.75  # f(w)^(3/4)
         self.probs = freqs / freqs.sum()
@@ -253,19 +253,60 @@ def build_vocabulary(documents, min_freq=5, max_vocab=10000):
     return vocab, word_to_idx, word_counts
 
 
-def plot_loss_curve(losses, save_path):
+def save_checkpoint(model, optimizer, epoch, all_losses, epoch_losses, vocab, word_to_idx, checkpoint_path):
+    """Save training checkpoint"""
+    checkpoint = {
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'all_losses': all_losses,
+        'epoch_losses': epoch_losses,
+        'vocab': vocab,
+        'word_to_idx': word_to_idx,
+        'hyperparameters': {
+            'embedding_dim': EMBEDDING_DIM,
+            'window_size': WINDOW_SIZE,
+            'negative_samples': NEGATIVE_SAMPLES,
+            'batch_size': BATCH_SIZE,
+            'learning_rate': LEARNING_RATE
+        }
+    }
+    torch.save(checkpoint, checkpoint_path)
+    
+    if DEBUG_MODE:
+        print(f"[DEBUG]: Checkpoint saved to {checkpoint_path}")
+
+
+def load_checkpoint(checkpoint_path, model, optimizer=None):
+    """Load training checkpoint"""
+    checkpoint = torch.load(checkpoint_path, map_location=device)
+    
+    model.load_state_dict(checkpoint['model_state_dict'])
+    
+    if optimizer:
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    
+    if DEBUG_MODE:
+        print(f"[DEBUG]: Checkpoint loaded from {checkpoint_path}")
+        print(f"[DEBUG]:   - Resuming from epoch {checkpoint['epoch']}")
+    
+    return (checkpoint['epoch'], checkpoint['all_losses'], checkpoint['epoch_losses'], 
+            checkpoint['vocab'], checkpoint['word_to_idx'])
+
+
+def plot_loss_curve(losses, save_path, title="Skip-gram Word2Vec Training Loss"):
     """Plot and save training loss curve"""
-    plt.figure(figsize=(10, 6))
-    plt.plot(losses, linewidth=2, alpha=0.7)
+    plt.figure(figsize=(12, 6))
+    plt.plot(losses, linewidth=1, alpha=0.5, color='blue', label='Batch Loss')
     
     # Add moving average for smoother curve
     if len(losses) > 100:
-        window = 100
+        window = min(100, len(losses) // 10)
         moving_avg = np.convolve(losses, np.ones(window)/window, mode='valid')
-        plt.plot(range(window-1, len(losses)), moving_avg, 'r-', linewidth=2, label='Moving Average (100)')
+        plt.plot(range(window-1, len(losses)), moving_avg, 'r-', linewidth=2, label=f'Moving Avg ({window})')
         plt.legend()
     
-    plt.title('Skip-gram Word2Vec Training Loss', fontsize=14)
+    plt.title(title, fontsize=14)
     plt.xlabel('Batch', fontsize=12)
     plt.ylabel('Loss', fontsize=12)
     plt.grid(True, alpha=0.3)
@@ -277,21 +318,25 @@ def plot_loss_curve(losses, save_path):
         print(f"[DEBUG]: Loss curve saved to {save_path}")
 
 
-def train_skipgram(model, dataloader, negative_sampler, optimizer, epochs, vocab_size, K=10):
+def train_skipgram(model, dataloader, negative_sampler, optimizer, epochs, vocab_size, 
+                   start_epoch=0, all_losses=None, epoch_losses=None, K=10):
     """Train the Skip-gram model"""
+    if all_losses is None:
+        all_losses = []
+    if epoch_losses is None:
+        epoch_losses = []
+    
     if DEBUG_MODE:
         print(f"[DEBUG]: Starting training...")
-        print(f"[DEBUG]:   - Epochs: {epochs}")
+        print(f"[DEBUG]:   - Start epoch: {start_epoch + 1}")
+        print(f"[DEBUG]:   - Total epochs: {epochs}")
         print(f"[DEBUG]:   - Batches per epoch: {len(dataloader)}")
         print(f"[DEBUG]:   - Negative samples: {K}")
     
     model.train()
-    all_losses = []
-    epoch_losses = []
-    
     start_time = time.time()
     
-    for epoch in range(epochs):
+    for epoch in range(start_epoch, epochs):
         epoch_loss = 0.0
         progress_bar = tqdm(dataloader, desc=f"Epoch {epoch+1}/{epochs}")
         
@@ -327,6 +372,13 @@ def train_skipgram(model, dataloader, negative_sampler, optimizer, epochs, vocab
         
         elapsed_time = time.time() - start_time
         print(f"Epoch {epoch+1}/{epochs} completed - Avg Loss: {avg_epoch_loss:.4f} - Time: {elapsed_time:.2f}s")
+        
+        # Save checkpoint every CHECKPOINT_INTERVAL epochs
+        if (epoch + 1) % CHECKPOINT_INTERVAL == 0:
+            checkpoint_path = os.path.join(modelsDir, f'w2v_checkpoint_epoch_{epoch+1}.pth')
+            save_checkpoint(model, optimizer, epoch + 1, all_losses, epoch_losses, 
+                          None, None, checkpoint_path)
+            print(f"  → Checkpoint saved at epoch {epoch+1}")
     
     if DEBUG_MODE:
         print(f"[DEBUG]: Training completed")
@@ -340,7 +392,7 @@ def main():
     """Main execution function"""
     if DEBUG_MODE:
         print("[DEBUG]: ========================================")
-        print("[DEBUG]: Skip-gram Word2Vec(Old) Module Started")
+        print("[DEBUG]: Skip-gram Word2Vec(New) Module Started")
         print("[DEBUG]: ========================================")
         print(f"[DEBUG]: Configuration:")
         print(f"[DEBUG]:   - DEBUG_MODE: {DEBUG_MODE}")
@@ -352,11 +404,28 @@ def main():
         print(f"[DEBUG]:   - Batch size: {BATCH_SIZE}")
         print(f"[DEBUG]:   - Epochs: {EPOCHS}")
         print(f"[DEBUG]:   - Learning rate: {LEARNING_RATE}")
+        print(f"[DEBUG]:   - Checkpoint interval: {CHECKPOINT_INTERVAL}")
     
     # File paths
     cleaned_file = os.path.join(dataDir, 'cleaned.txt')
-    model_file = os.path.join(modelsDir, 'skipgram_word2vec_old.pth')
-    embeddings_file = os.path.join(embeddingsDir, 'embeddings_w2v_old.npy')
+    model_file = os.path.join(modelsDir, 'skipgram_word2vec_final.pth')
+    embeddings_file = os.path.join(embeddingsDir, 'embeddings_w2v_new.npy')
+    checkpoint_file = os.path.join(modelsDir, 'w2v_checkpoint_latest.pth')
+    
+    # Check if we should resume from latest checkpoint
+    resume_training = False
+    start_epoch = 0
+    all_losses = []
+    epoch_losses = []
+    
+    if os.path.exists(checkpoint_file) and resume_training:
+        print("\n" + "="*60)
+        print("RESUMING FROM CHECKPOINT")
+        print("="*60)
+        # We'll load vocab and model after loading documents
+        resume = True
+    else:
+        resume = False
     
     # Load documents
     documents = load_documents(cleaned_file)
@@ -366,7 +435,7 @@ def main():
     vocab_size = len(vocab)
     
     # Save vocabulary
-    vocab_file = os.path.join(resultsDir, 'w2v_vocab_old.json')
+    vocab_file = os.path.join(resultsDir, 'w2v_vocab_new.json')
     with open(vocab_file, 'w', encoding='utf-8') as f:
         json.dump({'vocab': vocab, 'word_to_idx': word_to_idx}, f, ensure_ascii=False, indent=2)
     
@@ -375,7 +444,7 @@ def main():
     
     # Create dataset and dataloader
     dataset = SkipGramDataset(documents, word_to_idx, window_size=WINDOW_SIZE)
-    dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0)
+    dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=0, drop_last=True)
     
     # Initialize model
     model = SkipGramWord2Vec(vocab_size, embedding_dim=EMBEDDING_DIM).to(device)
@@ -386,47 +455,61 @@ def main():
     # Initialize optimizer (Adam)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     
+    # Resume from checkpoint if available
+    if resume and os.path.exists(checkpoint_file):
+        start_epoch, all_losses, epoch_losses, _, _ = load_checkpoint(
+            checkpoint_file, model, optimizer
+        )
+        print(f"Resumed from epoch {start_epoch}")
+    
     # Train model
+    print("\n" + "="*60)
     print("TRAINING SKIP-GRAM WORD2VEC")
     print("="*60)
     print(f"Vocabulary size: {vocab_size}")
     print(f"Training pairs: {len(dataset)}")
     print(f"Batches per epoch: {len(dataloader)}")
+    print(f"Batch size: {BATCH_SIZE}")
+    print(f"Total epochs: {EPOCHS}")
+    print("="*60 + "\n")
     
     all_losses, epoch_losses = train_skipgram(
         model, dataloader, negative_sampler, optimizer, 
-        epochs=EPOCHS, vocab_size=vocab_size, K=NEGATIVE_SAMPLES
+        epochs=EPOCHS, start_epoch=start_epoch,
+        all_losses=all_losses, epoch_losses=epoch_losses,
+        vocab_size=vocab_size, K=NEGATIVE_SAMPLES
     )
     
-    # Save model
+    # Save final model
     torch.save({
         'model_state_dict': model.state_dict(),
         'vocab': vocab,
         'word_to_idx': word_to_idx,
         'embedding_dim': EMBEDDING_DIM,
         'window_size': WINDOW_SIZE,
-        'negative_samples': NEGATIVE_SAMPLES
+        'negative_samples': NEGATIVE_SAMPLES,
+        'all_losses': all_losses,
+        'epoch_losses': epoch_losses
     }, model_file)
     
-    if DEBUG_MODE:
-        print(f"[DEBUG]: Model saved to {model_file}")
+    print(f"\nFinal model saved to: {model_file}")
     
     # Get and save averaged embeddings
     embeddings = model.get_embeddings().cpu().numpy()
     np.save(embeddings_file, embeddings)
     
-    print(f"\nEmbeddings saved to: {embeddings_file}")
+    print(f"Embeddings saved to: {embeddings_file}")
     print(f"Embeddings shape: {embeddings.shape}")
     
-    # Plot loss curve
-    loss_curve_file = os.path.join(figuresDir, 'w2v_loss_curve_old.png')
+    # Plot loss curves
+    loss_curve_file = os.path.join(figuresDir, 'w2v_loss_curve_new.png')
     plot_loss_curve(all_losses, loss_curve_file)
     print(f"Loss curve saved to: {loss_curve_file}")
     
     # Plot epoch losses
-    epoch_loss_file = os.path.join(figuresDir, 'w2v_epoch_loss_old.png')
+    epoch_loss_file = os.path.join(figuresDir, 'w2v_epoch_loss_new.png')
     plt.figure(figsize=(10, 6))
-    plt.plot(range(1, len(epoch_losses)+1), epoch_losses, marker='o', linewidth=2)
+    plt.plot(range(1, len(epoch_losses)+1), epoch_losses, marker='o', linewidth=2, markersize=4)
     plt.title('Skip-gram Word2Vec Epoch Loss', fontsize=14)
     plt.xlabel('Epoch', fontsize=12)
     plt.ylabel('Average Loss', fontsize=12)
@@ -452,14 +535,15 @@ def main():
         }
     }
     
-    stats_file = os.path.join(resultsDir, 'w2v_training_stats_old.json')
+    stats_file = os.path.join(resultsDir, 'w2v_training_stats_new.json')
     with open(stats_file, 'w', encoding='utf-8') as f:
         json.dump(stats, f, indent=2)
     
+    print(f"\nTraining stats saved to: {stats_file}")
+    
     if DEBUG_MODE:
-        print(f"[DEBUG]: Training stats saved to {stats_file}")
         print("[DEBUG]: ========================================")
-        print("[DEBUG]: Skip-gram Word2Vec Module Completed")
+        print("[DEBUG]: Skip-gram Word2Vec(New) Module Completed")
         print("[DEBUG]: ========================================")
     
     return embeddings, model
