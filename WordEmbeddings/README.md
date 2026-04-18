@@ -191,21 +191,3 @@ python WordEmbeddings/train_w2v_d200.py > outputs/WordEmbeddings_eval_c4.txt
 ```bash
 python WordEmbeddings/eval.py > outputs/WordEmbeddings_eval.txt
 ```
-
-## 📝 Requirements
-- Python 3.12.7+
-- PyTorch
-- NumPy, SciPy
-- scikit-learn (for t-SNE)
-- Matplotlib
-- tqdm
-- python-dotenv
-
-This README.md provides:
-1. **File documentation** with purpose and features of each file
-2. **Module overview** explaining each component
-3. **Hyperparameters table** comparing all four conditions
-4. **Detailed evaluation results** including nearest neighbors and analogy tests
-5. **Semantic relationship assessment** in 2-3 sentences
-6. **Recommendations** based on the findings
-7. **Usage instructions** for running the code
