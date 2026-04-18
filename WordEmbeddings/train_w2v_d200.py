@@ -26,8 +26,8 @@ figuresDir = os.getenv('figuresDir', './figures')
 
 device = torch.device(PROCESSOR if torch.cuda.is_available() and PROCESSOR == "cuda" else "cpu")
 
-# Hyperparameters
-EMBEDDING_DIM = 100
+# Hyperparameters - d=200
+EMBEDDING_DIM = 200  # Doubled from 100
 WINDOW_SIZE = 5
 NEGATIVE_SAMPLES = 10
 BATCH_SIZE = 1024
@@ -83,7 +83,7 @@ class SkipGramDataset(Dataset):
 
 
 class SkipGramWord2Vec(nn.Module):
-    def __init__(self, vocab_size, embedding_dim=100):
+    def __init__(self, vocab_size, embedding_dim=200):
         super(SkipGramWord2Vec, self).__init__()
         self.vocab_size = vocab_size
         self.embedding_dim = embedding_dim
@@ -231,17 +231,17 @@ def train_skipgram(model, dataloader, negative_sampler, optimizer, epochs, K=10)
 
 def main():
     print("="*60)
-    print("TRAINING SKIP-GRAM WORD2VEC ON raw.txt (C2)")
+    print("TRAINING SKIP-GRAM WORD2VEC WITH d=200 (C4)")
     print("="*60)
     
-    raw_file = os.path.join(dataDir, 'raw.txt')
-    documents = load_documents(raw_file)
+    cleaned_file = os.path.join(dataDir, 'cleaned.txt')
+    documents = load_documents(cleaned_file)
     
     vocab, word_to_idx, word_counts = build_vocabulary(documents, min_freq=MIN_FREQ)
     vocab_size = len(vocab)
     
     # Save vocabulary
-    vocab_file = os.path.join(resultsDir, 'w2v_raw_vocab.json')
+    vocab_file = os.path.join(resultsDir, 'w2v_d200_vocab.json')
     with open(vocab_file, 'w', encoding='utf-8') as f:
         json.dump({'vocab': vocab, 'word_to_idx': word_to_idx}, f, ensure_ascii=False, indent=2)
     print(f"Vocabulary saved to: {vocab_file}")
@@ -253,6 +253,7 @@ def main():
     print(f"\nVocabulary size: {vocab_size}")
     print(f"Training pairs: {len(dataset)}")
     print(f"Batches per epoch: {len(dataloader)}")
+    print(f"Embedding dimension: {EMBEDDING_DIM}")
     print("="*60 + "\n")
     
     # Initialize model
@@ -268,12 +269,12 @@ def main():
     
     # Save embeddings
     embeddings = model.get_embeddings().cpu().numpy()
-    embeddings_file = os.path.join(embeddingsDir, 'embeddings_w2v_raw.npy')
+    embeddings_file = os.path.join(embeddingsDir, 'embeddings_w2v_d200.npy')
     np.save(embeddings_file, embeddings)
     print(f"\nEmbeddings saved to: {embeddings_file}")
     
     # Save model
-    model_file = os.path.join(modelsDir, 'skipgram_word2vec_raw.pth')
+    model_file = os.path.join(modelsDir, 'skipgram_word2vec_d200.pth')
     torch.save({
         'model_state_dict': model.state_dict(),
         'vocab': vocab,
@@ -294,11 +295,11 @@ def main():
             'negative_samples': NEGATIVE_SAMPLES,
             'batch_size': BATCH_SIZE,
             'learning_rate': LEARNING_RATE,
-            'corpus': 'raw.txt'
+            'corpus': 'cleaned.txt'
         }
     }
     
-    stats_file = os.path.join(resultsDir, 'w2v_raw_training_stats.json')
+    stats_file = os.path.join(resultsDir, 'w2v_d200_training_stats.json')
     with open(stats_file, 'w', encoding='utf-8') as f:
         json.dump(stats, f, indent=2)
     print(f"Training stats saved to: {stats_file}")
@@ -310,13 +311,13 @@ def main():
         window = 100
         moving_avg = np.convolve(all_losses, np.ones(window)/window, mode='valid')
         plt.plot(range(window-1, len(all_losses)), moving_avg, 'r-', linewidth=2, label='Moving Avg (100)')
-    plt.title('Skip-gram Word2Vec Training Loss (raw.txt)', fontsize=14)
+    plt.title('Skip-gram Word2Vec Training Loss (d=200)', fontsize=14)
     plt.xlabel('Batch', fontsize=12)
     plt.ylabel('Loss', fontsize=12)
     plt.legend()
     plt.grid(True, alpha=0.3)
     plt.tight_layout()
-    loss_curve_file = os.path.join(figuresDir, 'w2v_raw_loss_curve.png')
+    loss_curve_file = os.path.join(figuresDir, 'w2v_d200_loss_curve.png')
     plt.savefig(loss_curve_file, dpi=300)
     plt.close()
     print(f"Loss curve saved to: {loss_curve_file}")

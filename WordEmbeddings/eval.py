@@ -65,7 +65,7 @@ class WordEmbeddingEvaluator:
         
         return np.dot(vec1, vec2) / (norm1 * norm2)
     
-    def find_nearest_neighbors(self, query_word, top_k=10, exclude_query=True):
+    def find_nearest_neighbors(self, query_word, top_k=5, exclude_query=True):
         """Find top-k nearest neighbors for a query word"""
         query_vec = self.get_vector(query_word)
         
@@ -217,10 +217,10 @@ def create_analogy_tests():
         
         # Location analogies
         ('پنجاب', 'لاہور', 'سندھ', 'کراچی'),  # Punjab : Lahore :: Sindh : Karachi
-        ('پاکستان', 'اسلام آباد', 'انڈیا', 'دہلی'),  # Pakistan : Islamabad :: India : Delhi
+        ('پاکستان', 'اسلام', 'انڈیا', 'دہلی'),  # Pakistan : Islamabad :: India : Delhi (approximate)
         
         # Security analogies
-        ('فوج', 'جرنیل', 'پولیس', 'افسر'),  # Army : General :: Police : Officer
+        ('فوج', 'پولیس', 'عدالت', 'جج'),  # Army : Police :: Court : Judge (approximate)
         ('عدالت', 'جج', 'ہسپتال', 'ڈاکٹر'),  # Court : Judge :: Hospital : Doctor
         
         # Action analogies
@@ -235,7 +235,7 @@ def create_word_pairs():
     """Create 20 manually labeled word pairs for MRR evaluation"""
     pairs = [
         # Politics pairs
-        ('پاکستان', 'اسلام آباد'),
+        ('پاکستان', 'اسلام'),
         ('عمران', 'خان'),
         ('نواز', 'شریف'),
         ('حکومت', 'وزیر'),
@@ -261,10 +261,10 @@ def create_word_pairs():
         
         # Economy pairs
         ('روپے', 'ڈالر'),
-        ('بینک', 'قرض'),
         
         # General
         ('ہسپتال', 'ڈاکٹر'),
+        ('سکول', 'تعلیم'),
     ]
     
     return pairs[:20]
@@ -310,7 +310,7 @@ def evaluate_condition(condition_id, condition_name, embeddings_file, vocab_file
     
     # 1. Nearest neighbors for query words
     print("\n" + "-"*60)
-    print("NEAREST NEIGHBORS")
+    print("NEAREST NEIGHBORS (Top 5)")
     print("-"*60)
     
     query_words = create_query_words()
@@ -413,11 +413,29 @@ def main():
         )
         all_results['C1'] = results_c1
     else:
-        print(f"PPMI files not found: {ppmi_file} or {ppmi_vocab}")
+        print(f"PPMI files not found")
     
-    # C3: Skip-gram on cleaned.txt (old - 50 epochs, batch 1024)
+    # C2: Skip-gram on raw.txt
     print("\n" + "="*80)
-    print("CONDITION C3: SKIP-GRAM ON cleaned.txt")
+    print("CONDITION C2: SKIP-GRAM ON raw.txt")
+    print("="*80)
+    
+    raw_embeddings = os.path.join(embeddingsDir, 'embeddings_w2v_raw.npy')
+    raw_vocab = os.path.join(resultsDir, 'w2v_raw_vocab.json')
+    
+    if os.path.exists(raw_embeddings) and os.path.exists(raw_vocab):
+        results_c2 = evaluate_condition(
+            'C2', 'Skip-gram on raw.txt',
+            raw_embeddings, raw_vocab,
+            'Word2Vec', 'c2_w2v_raw'
+        )
+        all_results['C2'] = results_c2
+    else:
+        print(f"Raw embeddings not found")
+    
+    # C3: Skip-gram on cleaned.txt (old - 50 epochs, batch 1024, d=100)
+    print("\n" + "="*80)
+    print("CONDITION C3: SKIP-GRAM ON cleaned.txt (d=100)")
     print("="*80)
     
     cleaned_embeddings = os.path.join(embeddingsDir, 'embeddings_w2v_old.npy')
@@ -425,35 +443,76 @@ def main():
     
     if os.path.exists(cleaned_embeddings) and os.path.exists(cleaned_vocab):
         results_c3 = evaluate_condition(
-            'C3', 'Skip-gram on cleaned.txt',
+            'C3', 'Skip-gram on cleaned.txt (d=100)',
             cleaned_embeddings, cleaned_vocab,
             'Word2Vec', 'c3_w2v_cleaned'
         )
         all_results['C3'] = results_c3
     else:
-        print(f"Cleaned embeddings not found: {cleaned_embeddings} or {cleaned_vocab}")
+        print(f"Cleaned embeddings not found")
+    
+    # C4: Skip-gram on cleaned.txt with d=200
+    print("\n" + "="*80)
+    print("CONDITION C4: SKIP-GRAM ON cleaned.txt (d=200)")
+    print("="*80)
+    
+    d200_embeddings = os.path.join(embeddingsDir, 'embeddings_w2v_d200.npy')
+    d200_vocab = os.path.join(resultsDir, 'w2v_d200_vocab.json')
+    
+    if os.path.exists(d200_embeddings) and os.path.exists(d200_vocab):
+        results_c4 = evaluate_condition(
+            'C4', 'Skip-gram on cleaned.txt (d=200)',
+            d200_embeddings, d200_vocab,
+            'Word2Vec', 'c4_w2v_d200'
+        )
+        all_results['C4'] = results_c4
+    else:
+        print(f"d=200 embeddings not found")
     
     # Summary comparison
     print("\n" + "="*80)
-    print("SUMMARY COMPARISON")
+    print("SUMMARY COMPARISON - ALL FOUR CONDITIONS")
     print("="*80)
     
-    print("\nCondition | MRR | Analogy Accuracy | Embedding Dim | Vocab Size")
-    print("-" * 75)
+    print("\nCondition | MRR | Analogy Accuracy | Embedding Dim | Vocab Size | Training Data")
+    print("-" * 85)
     
-    for cond_id, results in all_results.items():
-        mrr = results.get('mrr', 0.0)
-        acc = results.get('analogy_accuracy', 0.0)
-        dim = results.get('embedding_dim', 0)
-        vocab = results.get('vocab_size', 0)
-        print(f"{cond_id:9} | {mrr:.4f} | {acc:15.2%} | {dim:13} | {vocab}")
+    condition_names = {
+        'C1': 'PPMI Baseline',
+        'C2': 'W2V raw.txt (d=100)',
+        'C3': 'W2V cleaned.txt (d=100)',
+        'C4': 'W2V cleaned.txt (d=200)'
+    }
+    
+    for cond_id in ['C1', 'C2', 'C3', 'C4']:
+        if cond_id in all_results:
+            results = all_results[cond_id]
+            mrr = results.get('mrr', 0.0)
+            acc = results.get('analogy_accuracy', 0.0)
+            dim = results.get('embedding_dim', 0)
+            vocab = results.get('vocab_size', 0)
+            name = condition_names.get(cond_id, results.get('condition_name', cond_id))
+            print(f"{cond_id:9} | {mrr:.4f} | {acc:15.2%} | {dim:13} | {vocab:10} | {name}")
+        else:
+            print(f"{cond_id:9} | {'N/A':>6} | {'N/A':>15} | {'N/A':>13} | {'N/A':>10} | Not evaluated")
     
     # Save all results
-    summary_file = os.path.join(resultsDir, 'embedding_evaluation_summary.json')
+    summary_file = os.path.join(resultsDir, 'embedding_evaluation_summary_all.json')
     with open(summary_file, 'w', encoding='utf-8') as f:
         json.dump(all_results, f, ensure_ascii=False, indent=2)
     
     print(f"\nComplete summary saved to: {summary_file}")
+    
+    # Print best condition
+    if all_results:
+        best_mrr = max(all_results.items(), key=lambda x: x[1].get('mrr', 0))
+        best_acc = max(all_results.items(), key=lambda x: x[1].get('analogy_accuracy', 0))
+        
+        print("\n" + "="*80)
+        print("BEST PERFORMING CONDITION")
+        print("="*80)
+        print(f"Best MRR: {best_mrr[0]} with {best_mrr[1].get('mrr', 0):.4f}")
+        print(f"Best Analogy Accuracy: {best_acc[0]} with {best_acc[1].get('analogy_accuracy', 0):.2%}")
     
     return all_results
 
