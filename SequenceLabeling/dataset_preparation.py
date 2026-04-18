@@ -919,12 +919,12 @@ def main():
     print("SAVING DATASETS")
     print("-" * 60)
     
-    save_dataset(train_data, os.path.join(dataDir, 'train_annotated.json'))
-    save_dataset(val_data, os.path.join(dataDir, 'val_annotated.json'))
-    save_dataset(test_data, os.path.join(dataDir, 'test_annotated.json'))
+    save_dataset(train_data, os.path.join(resultsDir, 'train_annotated.json'))
+    save_dataset(val_data, os.path.join(resultsDir, 'val_annotated.json'))
+    save_dataset(test_data, os.path.join(resultsDir, 'test_annotated.json'))
     
     # Save full dataset
-    save_dataset(annotated, os.path.join(dataDir, 'full_annotated.json'))
+    save_dataset(annotated, os.path.join(resultsDir, 'full_annotated.json'))
     
     # Save statistics
     stats = {
