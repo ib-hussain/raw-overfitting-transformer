@@ -17,11 +17,9 @@ None/
 *$py.class
 *.so
 cython_debug/
-jawwad_bhai.pem
 
 # ── Virtual environments ─────────────────────────────────
 .Python
-.env
 .envrc
 .venv
 env/
@@ -90,10 +88,6 @@ ipython_config.py
 
 # ── Project-specific: ML experiment outputs ──────────────
 # Generated outputs – never commit these; they can be large
-**/*experiment_log*.txt
-**/*_week_*.csv
-**/*_week_*.npy
-**/output/
 # **/prediction/
 **/old_simulations/
 multivariate-time-series-data/
@@ -103,26 +97,12 @@ runs*/
 
 
 # ── Project-specific: data files ─────────────────────────
-data/Huge Stock Market Dataset/
-data/data_FRED/
-data/TradingAgents/
-Data2/
-
-# ── Project-specific: misc tool artefacts ────────────────
-assignment2work/LSTM/test_prediction/
-assignment2work/ticker-collector/.ipynb_checkpoints/
-assignment2work/paper-metric-reporter/.spyproject/
-assignment2work/paper-metric-reporter/**/*.ini
-.spyproject/
 .streamlit/
 ignore/
 *ignore*.*
 
 # ── Secrets & config ─────────────────────────────────────
-*.env
-# Keep .toml tracked (pyproject.toml etc.) – add specific
-# secret toml names below if needed:
-# secrets.toml
+secrets.toml
 
 # ── Misc ─────────────────────────────────────────────────
 *.tmp
