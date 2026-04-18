@@ -1,0 +1,228 @@
+[DEBUG]: ========================================
+[DEBUG]: TF-IDF Weighting Module Started
+[DEBUG]: ========================================
+[DEBUG]: Configuration:
+[DEBUG]:   - DEBUG_MODE: 1
+[DEBUG]:   - PROCESSOR: cpu
+[DEBUG]:   - Device: cpu
+[DEBUG]:   - dataDir: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data
+[DEBUG]: Input files:
+[DEBUG]:   - Cleaned text: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/cleaned.txt
+[DEBUG]:   - Metadata: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/metadata.json
+[DEBUG]: Output file: /mnt/d/Downloads/Repositories/raw-overfitting-transformer/embeddings/tfidf_matrix.npy
+[DEBUG]: Loading documents from /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/cleaned.txt
+[DEBUG]: Loaded 210 documents
+[DEBUG]: First document sample: <SOS> پاکستان کے صوبے پنجاب کی وزیر اعلی مریم نواز نے دو روز قبل اپنے ایکس اکاونٹ سے ایک پوسٹ کی جس میں انھ نے کہا کہ پنجاب کے تمام سرکاری ہسپتال میں ایمرجنسی میں کام کرنے والا عملے اور ڈاکٹر کے موبائ...
+[DEBUG]: Total documents loaded: 210
+[DEBUG]: Loading metadata from /mnt/d/Downloads/Repositories/raw-overfitting-transformer/data/metadata.json
+[DEBUG]: Loaded metadata for 210 documents
+[DEBUG]: Inferred topics: {'Sports', 'Entertainment', 'International', 'General', 'Education', 'Health', 'Economy', 'Politics', 'Weather', 'Accidents', 'Security', 'Legal'}
+[DEBUG]: Topic distribution: {'Politics': 103, 'General': 48, 'Security': 30, 'Legal': 7, 'Economy': 10, 'Education': 1, 'Weather': 3, 'Accidents': 2, 'Sports': 1, 'Entertainment': 3, 'Health': 1, 'International': 1}
+[DEBUG]: Starting TF-IDF computation...
+[DEBUG]: Starting fit_transform on 210 documents
+[DEBUG]: Device: cpu
+[DEBUG]: Building vocabulary from 210 documents
+[DEBUG]: Max vocabulary size: 10000
+[DEBUG]: Processed 0 documents for vocabulary
+[DEBUG]: Processed 50 documents for vocabulary
+[DEBUG]: Processed 100 documents for vocabulary
+[DEBUG]: Processed 150 documents for vocabulary
+[DEBUG]: Processed 200 documents for vocabulary
+[DEBUG]: Vocabulary built with 4386 tokens
+[DEBUG]: Top 20 most frequent tokens: ['کے', 'کی', 'میں', 'سے', 'اور', 'کا', 'کو', 'کہ', 'نے', 'پر', 'اس', '<NUM>', 'ایک', 'ہے', 'پاکستان', 'کر', 'ہو', 'ہے۔', 'یہ', 'ان']
+[DEBUG]: Computing TF matrix for 210 documents
+[DEBUG]: Processed TF for document 0
+[DEBUG]: Processed TF for document 50
+[DEBUG]: Processed TF for document 100
+[DEBUG]: Processed TF for document 150
+[DEBUG]: Processed TF for document 200
+[DEBUG]: TF matrix shape: torch.Size([210, 4387])
+[DEBUG]: TF matrix - non-zero elements: 21208
+[DEBUG]: Computing IDF from TF matrix of shape torch.Size([210, 4387])
+[DEBUG]: IDF computed for 4387 terms
+[DEBUG]: IDF range: [-0.0048, 5.3471]
+[DEBUG]: TF-IDF matrix computed
+[DEBUG]: TF-IDF matrix shape: torch.Size([210, 4387])
+[DEBUG]: TF-IDF matrix - non-zero elements: 21208
+[DEBUG]: TF-IDF matrix saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/embeddings/tfidf_matrix.npy
+[DEBUG]: Matrix shape: (210, 4387)
+[DEBUG]: Matrix size: 3.51 MB
+[DEBUG]: Finding top 10 discriminative words per topic
+[DEBUG]: Topics: ['Politics', 'General', 'Security', 'Legal', 'Economy', 'Education', 'Weather', 'Accidents', 'Sports', 'Entertainment', 'Health', 'International']
+[DEBUG]: Topic 'Politics' has 103 documents
+[DEBUG]: Topic 'General' has 48 documents
+[DEBUG]: Topic 'Security' has 30 documents
+[DEBUG]: Topic 'Legal' has 7 documents
+[DEBUG]: Topic 'Economy' has 10 documents
+[DEBUG]: Topic 'Education' has 1 documents
+[DEBUG]: Topic 'Weather' has 3 documents
+[DEBUG]: Topic 'Accidents' has 2 documents
+[DEBUG]: Topic 'Sports' has 1 documents
+[DEBUG]: Topic 'Entertainment' has 3 documents
+[DEBUG]: Topic 'Health' has 1 documents
+[DEBUG]: Topic 'International' has 1 documents
+
+============================================================
+TOP-10 MOST DISCRIMINATIVE WORDS PER TOPIC
+============================================================
+
+[Topic: Politics]
+----------------------------------------
+   1. خان                            (score: 0.005901)
+   2. عمران                          (score: 0.005796)
+   3. پاکستان                        (score: 0.005448)
+   4. <NUM>                          (score: 0.005038)
+   5. امریکہ                         (score: 0.004449)
+   6. انڈیا                          (score: 0.004363)
+   7. خارجہ                          (score: 0.004356)
+   8. وزیر                           (score: 0.004162)
+   9. نواز                           (score: 0.004035)
+  10. ہے                             (score: 0.004008)
+
+[Topic: General]
+----------------------------------------
+   1. بی                             (score: 0.007624)
+   2. <NUM>                          (score: 0.006581)
+   3. ویڈیو                          (score: 0.006171)
+   4. سال                            (score: 0.005444)
+   5. بسنت                           (score: 0.005354)
+   6. کام                            (score: 0.005154)
+   7. سی                             (score: 0.004993)
+   8. محمد                           (score: 0.004992)
+   9. سلطان                          (score: 0.004919)
+  10. ریورس                          (score: 0.004768)
+
+[Topic: Security]
+----------------------------------------
+   1. پولیس                          (score: 0.015259)
+   2. اپریشن                         (score: 0.009711)
+   3. فوجی                           (score: 0.009287)
+   4. قتل                            (score: 0.008045)
+   5. مکا                            (score: 0.007310)
+   6. نقل                            (score: 0.006898)
+   7. اقبال                          (score: 0.006694)
+   8. علاقے                          (score: 0.006608)
+   9. تیراہ                          (score: 0.006560)
+  10. ایس                            (score: 0.006434)
+
+[Topic: Legal]
+----------------------------------------
+   1. ارکان                          (score: 0.017276)
+   2. صلح                            (score: 0.017269)
+   3. بٹ                             (score: 0.016090)
+   4. حکم                            (score: 0.015331)
+   5. کورٹ                           (score: 0.015331)
+   6. رجب                            (score: 0.015183)
+   7. بلوچستان                       (score: 0.013460)
+   8. گھریلو                         (score: 0.012450)
+   9. ورثا                           (score: 0.011823)
+  10. خط                             (score: 0.011548)
+
+[Topic: Economy]
+----------------------------------------
+   1. روپے                           (score: 0.018219)
+   2. ملزم                           (score: 0.013687)
+   3. بارگین                         (score: 0.013588)
+   4. پلی                            (score: 0.013588)
+   5. یونیورسٹی                      (score: 0.012695)
+   6. ارب                            (score: 0.012396)
+   7. ٹیکس                           (score: 0.012024)
+   8. حبیب                           (score: 0.011931)
+   9. انگار                          (score: 0.011563)
+  10. بلوچ                           (score: 0.011442)
+
+[Topic: Education]
+----------------------------------------
+   1. عادل                           (score: 0.086720)
+   2. راجہ                           (score: 0.086720)
+   3. اکبر                           (score: 0.086720)
+   4. شہزاد                          (score: 0.079165)
+   5. مرزا                           (score: 0.079165)
+   6. برطانیہ                        (score: 0.046431)
+   7. بندی                           (score: 0.044166)
+   8. منصوبہ                         (score: 0.044166)
+   9. حمل                            (score: 0.037820)
+  10. پاکستا                         (score: 0.036259)
+
+[Topic: Weather]
+----------------------------------------
+   1. برفباری                        (score: 0.069809)
+   2. انچ                            (score: 0.035404)
+   3. موسمی                          (score: 0.023270)
+   4. سیاح                           (score: 0.021946)
+   5. مقام                           (score: 0.021256)
+   6. وادی                           (score: 0.020685)
+   7. چپورسن                         (score: 0.020547)
+   8. دھماک                          (score: 0.020547)
+   9. وقفے                           (score: 0.020547)
+  10. جولا                           (score: 0.017487)
+
+[Topic: Accidents]
+----------------------------------------
+   1. اگ                             (score: 0.070997)
+   2. پلازہ                          (score: 0.064132)
+   3. گل                             (score: 0.052239)
+   4. شاپنگ                          (score: 0.043495)
+   5. لگنے                           (score: 0.037017)
+   6. پروڈیوسر                       (score: 0.033228)
+   7. ریسکیو                         (score: 0.033191)
+   8. امین                           (score: 0.030944)
+   9. عوامل                          (score: 0.021747)
+  10. یونس                           (score: 0.021747)
+
+[Topic: Sports]
+----------------------------------------
+   1. سرفراز                         (score: 0.086716)
+   2. احمد                           (score: 0.062793)
+   3. تصویر                          (score: 0.057620)
+   4. میچ                            (score: 0.043358)
+   5. وائرل                          (score: 0.038413)
+   6. صارفین                         (score: 0.038413)
+   7. موبائل                         (score: 0.038413)
+   8. فون                            (score: 0.033025)
+   9. انڈر                           (score: 0.028378)
+  10. سیمی                           (score: 0.028378)
+
+[Topic: Entertainment]
+----------------------------------------
+   1. فلم                            (score: 0.030388)
+   2. کالجز                          (score: 0.029455)
+   3. اجرک                           (score: 0.028706)
+   4. ایم                            (score: 0.028377)
+   5. سرگرم                          (score: 0.025692)
+   6. گدھا                           (score: 0.020964)
+   7. تھ                             (score: 0.020219)
+   8. ٹریلر                          (score: 0.019889)
+   9. دھورندھر                       (score: 0.019889)
+  10. طالب                           (score: 0.019637)
+
+[Topic: Health]
+----------------------------------------
+   1. سالگرہ                         (score: 0.056583)
+   2. ظہور                           (score: 0.044323)
+   3. بکھرا                          (score: 0.044323)
+   4. سومرو                          (score: 0.044323)
+   5. پارس                           (score: 0.044323)
+   6. جوڑے                           (score: 0.044323)
+   7. وارڈ                           (score: 0.044323)
+   8. شادی                           (score: 0.043493)
+   9. پور                            (score: 0.040462)
+  10. ڈی                             (score: 0.035913)
+
+[Topic: International]
+----------------------------------------
+   1. اسلامی                         (score: 0.148517)
+   2. ممالک                          (score: 0.077860)
+   3. ایران                          (score: 0.060487)
+   4. طاقت                           (score: 0.056271)
+   5. شناخت                          (score: 0.049506)
+   6. امریکہ                         (score: 0.048809)
+   7. تنازع                          (score: 0.045049)
+   8. سنہ                            (score: 0.033297)
+   9. تسلط                           (score: 0.030821)
+  10. بیرو                           (score: 0.030821)
+
+[DEBUG]: Topic words saved to /mnt/d/Downloads/Repositories/raw-overfitting-transformer/results/tfidf_topic_words.json
+[DEBUG]: ========================================
+[DEBUG]: TF-IDF Weighting Module Completed
+[DEBUG]: ========================================
