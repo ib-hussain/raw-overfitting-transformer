@@ -267,7 +267,6 @@ with open('data/transformer_train.json', 'r', encoding='utf-8') as f:
 ---
 
 *This README will be updated as the Transformer Encoder implementation progresses.*
-```
 
 This README provides:
 
@@ -281,3 +280,361 @@ This README provides:
 8. **Category mapping** with descriptions
 9. **Next steps** for the Transformer implementation
 10. **Key observations** about the dataset
+
+
+
+
+# UPDATED NEW INFORMATION ADDED TO THE README AS THE SECOND VERSION OF THE README:
+
+## 1. Comprehensive README for TransformerEncoder Directory
+
+# Transformer Encoder: Text Classification
+
+This module implements a complete Transformer Encoder from scratch for 5-class topic classification on Urdu news articles. All components are built without using PyTorch's built-in Transformer classes.
+
+## 📁 File Structure
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `dataset_preparation.py` | Dataset creation, categorization, tokenization, and splitting | ✅ Complete |
+| `scaled_dotProductAttention.py` | Scaled dot-product attention mechanism | ✅ Complete |
+| `MultiHead_selfAttention.py` | Multi-head self-attention (h=4, d_model=128) | ✅ Complete |
+| `positional_encoding.py` | Sinusoidal positional encoding | ✅ Complete |
+| `PositionWise_feedForward_Network.py` | Position-wise FFN (d_ff=512) | ✅ Complete |
+| `transformer_encoder.py` | Single Transformer encoder block (Pre-LN) | ✅ Complete |
+
+## 🎯 Module Overview
+
+This module implements a Transformer Encoder with the following architecture:
+
+```
+Input Tokens → Token Embedding → Positional Encoding → [CLS] Token Prepended
+    → 4× Transformer Encoder Blocks (Pre-LN) → LayerNorm → MLP Classifier (128→64→5)
+```
+
+### Architecture Specifications
+
+| Component | Configuration |
+|-----------|--------------|
+| **Vocabulary Size** | 1,033 tokens |
+| **Max Sequence Length** | 256 |
+| **Embedding Dimension (d_model)** | 128 |
+| **Attention Heads (h)** | 4 |
+| **Key/Value Dimension (d_k, d_v)** | 32 per head |
+| **Feed-Forward Dimension (d_ff)** | 512 |
+| **Encoder Layers** | 4 |
+| **Dropout** | 0.1 |
+| **Output Classes** | 5 |
+
+### Pre-Layer Normalization Architecture
+
+Each encoder block uses Pre-LN (modern standard):
+
+```
+x ← x + Dropout(MultiHead(LN(x)))
+x ← x + Dropout(FFN(LN(x)))
+```
+
+---
+
+## 📊 Dataset Summary
+
+### Category Distribution
+
+| Category | Train | Val | Test | Total |
+|----------|-------|-----|------|-------|
+| Politics | 22 | 4 | 6 | 32 |
+| Sports | 44 | 9 | 11 | 64 |
+| Economy | 39 | 8 | 9 | 56 |
+| International | 19 | 4 | 5 | 28 |
+| Health & Society | 21 | 4 | 5 | 30 |
+| **Total** | **145** | **29** | **36** | **210** |
+
+### Dataset Statistics
+
+| Metric | Value |
+|--------|-------|
+| Total Articles | 210 |
+| Training Samples | 145 (69.0%) |
+| Validation Samples | 29 (13.8%) |
+| Test Samples | 36 (17.1%) |
+| Max Sequence Length | 256 |
+| Vocabulary Size | 1,033 |
+| UNK Token Rate | 16.39% |
+
+---
+
+## 🔧 Component Details
+
+### 1. Scaled Dot-Product Attention (`scaled_dotProductAttention.py`)
+
+Implements the core attention mechanism:
+
+```
+Attention(Q, K, V) = softmax(QK^T / √d_k) V
+```
+
+**Features:**
+- Optional padding mask support
+- Returns both output and attention weights
+- Dropout on attention weights
+- Causal mask support for decoder
+
+**Parameters:** None (stateless)
+
+---
+
+### 2. Multi-Head Self-Attention (`MultiHead_selfAttention.py`)
+
+Splits input into multiple heads for parallel attention.
+
+**Configuration:**
+- h = 4 heads
+- d_model = 128
+- d_k = d_v = 32 per head
+
+**Parameters:**
+| Component | Parameters |
+|-----------|------------|
+| W_q | 16,384 |
+| W_k | 16,384 |
+| W_v | 16,384 |
+| W_o | 16,384 |
+| **Total** | **65,536** |
+
+**Features:**
+- Separate projection matrices per head (implemented via reshaping)
+- Shared output projection
+- Xavier uniform initialization
+- Returns attention weights for visualization
+
+---
+
+### 3. Positional Encoding (`positional_encoding.py`)
+
+Sinusoidal positional encoding as fixed (non-learned) buffer:
+
+```
+PE(pos, 2i) = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+```
+
+**Features:**
+- Fixed encoding (registered as buffer, not parameter)
+- Max length: 512 positions
+- Value range: [-1, 1]
+- Nearby positions have higher similarity
+- Consistent norm across all positions (8.0)
+
+**Visualizations Generated:**
+- `positional_encoding_visualization.png`: Heatmap and frequency analysis
+- `positional_encoding_similarity.png`: Similarity vs position distance
+
+---
+
+### 4. Position-Wise Feed-Forward Network (`PositionWise_feedForward_Network.py`)
+
+Two-layer MLP applied independently to each position:
+
+```
+FFN(x) = max(0, xW₁ + b₁)W₂ + b₂
+```
+
+**Configuration:**
+- d_model = 128
+- d_ff = 512
+- Activation: ReLU
+
+**Parameters:**
+| Component | Parameters |
+|-----------|------------|
+| linear1.weight | 65,536 |
+| linear1.bias | 512 |
+| linear2.weight | 65,536 |
+| linear2.bias | 128 |
+| **Total** | **131,712** |
+
+**Note:** FFN has ~2× more parameters than Multi-Head Attention.
+
+---
+
+### 5. Transformer Encoder Block (`transformer_encoder.py`)
+
+Single encoder block with Pre-Layer Normalization.
+
+**Parameters per Block:**
+| Component | Parameters |
+|-----------|------------|
+| Multi-Head Attention | 65,536 |
+| Feed-Forward Network | 131,712 |
+| Layer Normalization (×2) | 512 |
+| **Total per Block** | **197,760** |
+
+**Stacked Parameters:**
+| Layers | Parameters |
+|--------|------------|
+| 1 | 197,760 |
+| 2 | 395,520 |
+| **4** | **791,040** |
+| 6 | 1,186,560 |
+| 8 | 1,582,080 |
+
+---
+
+## 🚀 Training Configuration
+
+### Hyperparameters
+
+| Parameter | Value |
+|-----------|-------|
+| Batch Size | 32 |
+| Learning Rate | 5 × 10⁻⁴ |
+| Weight Decay | 0.01 |
+| Warmup Steps | 50 |
+| Total Epochs | 50 |
+| Gradient Clip | 1.0 |
+| Optimizer | AdamW |
+| LR Schedule | Cosine with linear warmup |
+| Loss Function | Cross-Entropy |
+
+### Model Size
+
+| Component | Parameters |
+|-----------|------------|
+| Token Embedding | 132,224 |
+| Positional Encoding | 0 (fixed) |
+| [CLS] Token | 128 |
+| 4× Encoder Blocks | 791,040 |
+| Layer Norm | 256 |
+| MLP Classifier (128→64→5) | 8,581 |
+| **Total** | **932,229** |
+
+---
+
+## 📈 Training Results
+
+### Best Performance
+
+| Metric | Value |
+|--------|-------|
+| Best Validation Accuracy | 34.48% |
+| Test Accuracy | 22.22% |
+| Test Precision (weighted) | 9.64% |
+| Test Recall (weighted) | 22.22% |
+| Test F1 (weighted) | 11.87% |
+
+### Per-Class Test Performance
+
+| Class | Precision | Recall | F1 |
+|-------|-----------|--------|-----|
+| Politics | 25.00% | 16.67% | 20.00% |
+| Sports | 0.00% | 0.00% | 0.00% |
+| Economy | 21.88% | 77.78% | 34.15% |
+| International | 0.00% | 0.00% | 0.00% |
+| Health & Society | 0.00% | 0.00% | 0.00% |
+
+### Training Progress
+
+| Epoch | Train Loss | Train Acc | Val Loss | Val Acc |
+|-------|------------|-----------|----------|---------|
+| 1 | 1.8120 | 22.07% | 1.6415 | 17.24% |
+| 2 | 1.6723 | 22.76% | 1.5629 | 31.03% |
+| 50 | 1.3357 | 42.07% | 2.1808 | 27.59% |
+
+**Improvement (Epoch 1 → 50):**
+- Val Loss: -0.5393 (-32.9%)
+- Val Acc: +10.34% (+60.0% relative)
+
+---
+
+## 📊 Analysis & Observations
+
+### Performance Issues
+
+The model shows signs of **overfitting**:
+1. Training accuracy improves to ~42% while validation accuracy peaks at 34% then degrades
+2. Validation loss increases from 1.56 (epoch 2) to 2.18 (epoch 50)
+3. Model only learns to predict Economy class effectively (77.78% recall)
+
+### Limitations
+
+1. **Small Dataset:** Only 145 training samples across 5 classes
+   - Sports class has 44 samples but 0% recall
+   - Model collapses to predicting Economy for most inputs
+
+2. **Class Imbalance:** Sports (30.5%) and Economy (26.7%) dominate
+
+3. **UNK Token Rate:** 16.39% of tokens are unknown, limiting semantic understanding
+
+4. **Sequence Length:** 256 tokens may be insufficient for some articles
+
+### Recommendations for Improvement
+
+1. **Data Augmentation:** Back-translation, synonym replacement
+2. **Class Weights:** Use weighted loss to handle imbalance
+3. **Subword Tokenization:** Reduce UNK rate with BPE or character-level features
+4. **Pretrained Embeddings:** Use larger pretrained Urdu embeddings
+5. **Regularization:** Increase dropout, add weight decay, early stopping
+6. **More Data:** Annotate additional articles for underrepresented classes
+
+---
+
+## 📦 Output Files
+
+### Data Files (`data/`)
+| File | Description |
+|------|-------------|
+| `transformer_train.npz` | Training set (145 samples) |
+| `transformer_val.npz` | Validation set (29 samples) |
+| `transformer_test.npz` | Test set (36 samples) |
+| `transformer_categories.json` | Category mapping |
+
+### Results Files (`results/`)
+| File | Description |
+|------|-------------|
+| `transformer_dataset_stats.json` | Dataset statistics |
+| `transformer_results.json` | Training and evaluation results |
+
+### Figure Files (`figures/`)
+| File | Description |
+|------|-------------|
+| `transformer_training_curves.png` | Loss and accuracy curves |
+| `transformer_confusion_matrix.png` | Test set confusion matrix |
+| `positional_encoding_visualization.png` | PE heatmap and analysis |
+| `positional_encoding_similarity.png` | PE similarity vs distance |
+| `attention_weights_visualization.png` | Sample attention weights |
+
+### Model Files (`models/transformer_classifier/`)
+| File | Description |
+|------|-------------|
+| `latest_checkpoint.pth` | Most recent training checkpoint |
+| `best_model.pth` | Model with best validation accuracy |
+
+---
+
+## 🚀 Usage
+
+### 1. Dataset Preparation
+```bash
+python TransformerEncoder/dataset_preparation.py > outputs/transformer_dataset_prep.txt
+```
+
+### 2. Test Individual Components
+```bash
+python TransformerEncoder/scaled_dotProductAttention.py > outputs/scaled_dotProductAttention.txt
+python TransformerEncoder/MultiHead_selfAttention.py > outputs/MultiHead_selfAttention.txt
+python TransformerEncoder/positional_encoding.py > outputs/positional_encoding.txt
+python TransformerEncoder/PositionWise_feedForward_Network.py > outputs/PositionWise_feedForward_Network.txt
+python TransformerEncoder/transformer_encoder.py > outputs/transformer_encoder.txt
+```
+
+---
+
+
+All implementations are from scratch following the assignment constraints (no PyTorch built-in Transformer classes).
+
+---
+
+*This README documents the complete TransformerEncoder module as implemented.*
+
+---
