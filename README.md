@@ -408,7 +408,7 @@ DEBUG_MODE = 1
 PROCESSOR = "cpu"
 repoDir = "/path/to/raw-overfitting-transformer"
 ```
-
+FOR DETAILED INSTRUCTIONS REFER TO: [reproduction guide.](REPRODUCTION.md)
 ---
 
 ## References
@@ -419,4 +419,3 @@ repoDir = "/path/to/raw-overfitting-transformer"
 4. Lample et al. (2016). "Neural Architectures for Named Entity Recognition"
 5. Xiong et al. (2020). "On Layer Normalization in the Transformer Architecture"
 
----
