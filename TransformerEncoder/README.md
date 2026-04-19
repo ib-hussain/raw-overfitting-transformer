@@ -1,296 +1,9 @@
+I'll create a comprehensive, well-structured README.md for the TransformerEncoder module that properly documents all components, results, and analysis. This will be based on all the information from the output logs and results files.
+
+```markdown
 # Transformer Encoder: Text Classification
 
-This module implements a Transformer Encoder for multi-class text classification on Urdu news articles. The dataset is prepared from `cleaned.txt` and `Metadata.json`, with articles categorized into 5 distinct categories.
-
-## 📁 File Structure
-
-| File | Purpose | Status |
-|------|---------|--------|
-| `dataset_preparation.py` | Dataset creation, categorization, tokenization, and splitting | ✅ Complete |
-| `scaled_dotProductAttention.py` | Scaled dot-product attention mechanism | 🔄 Pending |
-| `MultiHead_selfAttention.py` | Multi-head self-attention implementation | 🔄 Pending |
-| `positional_encoding.py` | Positional encoding for sequence order | 🔄 Pending |
-| `PositionWise_feedForward_Network.py` | Position-wise feed-forward network | 🔄 Pending |
-| `transformer_encoder.py` | Complete Transformer Encoder implementation | 🔄 Pending |
-
-## 📊 Dataset Preparation Summary
-
-### Article Categorization
-
-Articles from `Metadata.json` are assigned to one of 5 categories based on keyword matching in titles.
-
-| Category ID | Category Name | Indicative Keywords |
-|-------------|---------------|---------------------|
-| 1 | **Politics** | election, government, minister, parliament, party, vote, democracy, president, senate, assembly, political, الیکشن, انتخابات, حکومت, وزیر, پارلیمان, جماعت, ووٹ, جمہوریت, صدر, سینیٹ, اسمبلی, سیاسی |
-| 2 | **Sports** | cricket, match, team, player, score, tournament, football, hockey, sports, stadium, champion, league, کرکٹ, میچ, ٹیم, کھلاڑی, سکور, ٹورنامنٹ, فٹبال, ہاکی, کھیل, سٹیڈیم, چیمپئن, لیگ |
-| 3 | **Economy** | inflation, trade, bank, GDP, budget, economy, stock, market, investment, export, import, finance, مہنگائی, تجارت, بینک, جی ڈی پی, بجٹ, معیشت, سٹاک, مارکیٹ, سرمایہ کاری, برآمد, درآمد, مالیات |
-| 4 | **International** | UN, treaty, foreign, bilateral, conflict, diplomatic, ambassador, sanction, war, peace, alliance, global, اقوام متحدہ, معاہدہ, خارجہ, دو طرفہ, تنازع, سفارتی, سفیر, پابندی, جنگ, امن, اتحاد, عالمی |
-| 5 | **Health & Society** | hospital, disease, vaccine, flood, education, health, doctor, patient, school, college, university, student, teacher, earthquake, disaster, relief, welfare, ہسپتال, بیماری, ویکسین, سیلاب, تعلیم, صحت, ڈاکٹر, مریض, سکول, کالج, یونیورسٹی, طلبہ, استاد |
-
-### Tokenization Details
-
-- **Vocabulary Source:** Word2Vec embeddings from Part 1 (Condition C3)
-- **Vocabulary Size:** 1,033 tokens
-- **Sequence Length:** 256 tokens (padded/truncated)
-- **UNK Token Rate:** 16.39% (5,593 out of 34,120 tokens)
-
-### Dataset Splits (70/15/15 Stratified by Category)
-
-| Split | Articles | Percentage |
-|-------|----------|------------|
-| **Training** | 145 | 69.0% |
-| **Validation** | 29 | 13.8% |
-| **Test** | 36 | 17.1% |
-| **Total** | 210 | 100% |
-
----
-
-## 📈 Class Distribution
-
-### Overall Dataset Distribution
-
-| Category | Count | Percentage |
-|----------|-------|------------|
-| **Politics** | 32 | 15.2% |
-| **Sports** | 64 | 30.5% |
-| **Economy** | 56 | 26.7% |
-| **International** | 28 | 13.3% |
-| **Health & Society** | 30 | 14.3% |
-| **Total** | **210** | **100%** |
-
-### Distribution Across Splits
-
-| Category | Train | Validation | Test | Total |
-|----------|-------|------------|------|-------|
-| **Politics** | 22 | 4 | 6 | 32 |
-| **Sports** | 44 | 9 | 11 | 64 |
-| **Economy** | 39 | 8 | 9 | 56 |
-| **International** | 19 | 4 | 5 | 28 |
-| **Health & Society** | 21 | 4 | 5 | 30 |
-| **Total** | **145** | **29** | **36** | **210** |
-
-### Distribution Visualization
-
-```
-Overall Category Distribution (210 articles)
-============================================
-Politics          15.2% (32)
-Sports            30.5% (64)
-Economy           26.7% (56)
-International     13.3% (28)
-Health & Society  14.3% (30)
-
-Split Distribution
-==================
-                    Train    Val     Test
-Politics            22       4       6
-Sports              44       9       11
-Economy             39       8       9
-International       19       4       5
-Health & Society    21       4       5
-─────────────────────────────────────────
-Total               145      29      36
-Percentage          69.0%    13.8%   17.1%
-```
-
----
-
-## 📁 Output Files
-
-### Data Files (`data/`)
-| File | Description | Shape |
-|------|-------------|-------|
-| `transformer_train.json` | Training set (145 articles) | JSON array |
-| `transformer_val.json` | Validation set (29 articles) | JSON array |
-| `transformer_test.json` | Test set (36 articles) | JSON array |
-| `transformer_full.json` | Complete dataset (210 articles) | JSON array |
-| `transformer_train.npz` | Training set as numpy arrays | tokens: (145, 256), labels: (145,) |
-| `transformer_val.npz` | Validation set as numpy arrays | tokens: (29, 256), labels: (29,) |
-| `transformer_test.npz` | Test set as numpy arrays | tokens: (36, 256), labels: (36,) |
-| `transformer_categories.json` | Category ID to name mapping | JSON object |
-
-### Results Files (`results/`)
-| File | Description |
-|------|-------------|
-| `transformer_dataset_stats.json` | Statistical summary of the dataset |
-
----
-
-## 📊 Dataset Statistics Summary
-
-```json
-{
-  "total_articles": 210,
-  "train_articles": 145,
-  "val_articles": 29,
-  "test_articles": 36,
-  "max_sequence_length": 256,
-  "vocab_size": 1033,
-  "distribution": {
-    "overall": {
-      "Politics": 32,
-      "Sports": 64,
-      "Economy": 56,
-      "International": 28,
-      "Health_Society": 30
-    },
-    "train": {
-      "Politics": 22,
-      "Sports": 44,
-      "Economy": 39,
-      "International": 19,
-      "Health_Society": 21
-    },
-    "val": {
-      "Politics": 4,
-      "Sports": 9,
-      "Economy": 8,
-      "International": 4,
-      "Health_Society": 4
-    },
-    "test": {
-      "Politics": 6,
-      "Sports": 11,
-      "Economy": 9,
-      "International": 5,
-      "Health_Society": 5
-    }
-  }
-}
-```
-
----
-
-## 🔧 Dataset Preparation Pipeline
-
-### Step 1: Article Categorization
-Each article from `Metadata.json` is assigned a category based on keyword matching in the title. Both English and Urdu keywords are used for robust categorization.
-
-### Step 2: Tokenization
-Articles from `cleaned.txt` are tokenized using the Word2Vec vocabulary from Part 1 (Condition C3). Tokens not in the vocabulary are mapped to `<UNK>` (index 0).
-
-### Step 3: Sequence Padding/Truncation
-Each article's token sequence is padded or truncated to exactly 256 tokens to ensure uniform input size for the Transformer model.
-
-### Step 4: Stratified Split
-The dataset is split into training (70%), validation (15%), and test (15%) sets while maintaining the original category distribution across all splits.
-
----
-
-## 📝 Data Format
-
-### JSON Format (for inspection)
-Each article in the JSON files has the following structure:
-```json
-{
-  "doc_id": 1,
-  "category_id": 1,
-  "category_name": "Politics",
-  "title": "پنجاب کے ہسپتالوں میں ایمرجنسی میں کام کرنے والے طبّی عملے کے موبائل فون کے استعمال پر پابندی",
-  "publish_date": "2026-01-26",
-  "tokens": [15, 1, 477, 70, 2, 53, 241, 595, ...]
-}
-```
-
-### NPZ Format (for efficient training)
-- `tokens`: NumPy array of shape `(n_samples, 256)` containing token indices
-- `labels`: NumPy array of shape `(n_samples,)` containing category IDs (1-5)
-
----
-
-## 🚀 Usage
-
-### Run Dataset Preparation
-```bash
-python TransformerEncoder/dataset_preparation.py > outputs/transformer_dataset_prep.txt
-```
-
-### Load Dataset in Python
-```python
-import numpy as np
-import json
-
-# Load as numpy arrays (recommended for training)
-data = np.load('data/transformer_train.npz')
-tokens = data['tokens']  # shape: (145, 256)
-labels = data['labels']  # shape: (145,)
-
-# Load as JSON (for inspection)
-with open('data/transformer_train.json', 'r', encoding='utf-8') as f:
-    train_data = json.load(f)
-```
-
----
-
-## 📋 Category Mapping
-
-| ID | Name | Description |
-|----|------|-------------|
-| 1 | Politics | Government, elections, political parties, leaders |
-| 2 | Sports | Cricket, football, matches, tournaments, players |
-| 3 | Economy | Trade, banking, stock market, inflation, budget |
-| 4 | International | Foreign relations, diplomacy, conflicts, global affairs |
-| 5 | Health & Society | Healthcare, education, disasters, social welfare |
-
----
-
-## 🎯 Next Steps
-
-1. **Implement Transformer Components:**
-   - Scaled Dot-Product Attention
-   - Multi-Head Self-Attention
-   - Positional Encoding
-   - Position-Wise Feed-Forward Network
-
-2. **Build Transformer Encoder:**
-   - Stack N encoder layers
-   - Add classification head
-   - Train on prepared dataset
-
-3. **Evaluation:**
-   - Accuracy, Precision, Recall, F1 per category
-   - Confusion matrix
-   - Comparison with baseline models
-
----
-
-## 📊 Key Observations
-
-1. **Class Imbalance:** Sports (30.5%) and Economy (26.7%) dominate the dataset, while Politics (15.2%), Health & Society (14.3%), and International (13.3%) are relatively balanced but smaller.
-
-2. **UNK Rate:** 16.39% of tokens are unknown, indicating vocabulary coverage gaps that may affect model performance.
-
-3. **Sequence Length:** 256 tokens capture most article content; average article length is ~162 tokens.
-
-4. **Stratification:** The 70/15/15 split maintains category proportions across all splits, ensuring representative evaluation.
-
----
-
-*This README will be updated as the Transformer Encoder implementation progresses.*
-
-This README provides:
-
-1. **Complete file structure documentation** with status indicators
-2. **Dataset preparation summary** including categorization criteria
-3. **Class distribution** across all 5 categories with visual representation
-4. **Detailed split statistics** (70/15/15 stratified)
-5. **Tokenization details** including vocabulary source and UNK rate
-6. **Output file descriptions** with shapes and formats
-7. **Usage instructions** for running the preparation script
-8. **Category mapping** with descriptions
-9. **Next steps** for the Transformer implementation
-10. **Key observations** about the dataset
-
-
-
-
-# UPDATED NEW INFORMATION ADDED TO THE README AS THE SECOND VERSION OF THE README:
-
-## 1. Comprehensive README for TransformerEncoder Directory
-
-# Transformer Encoder: Text Classification
-
-This module implements a complete Transformer Encoder from scratch for 5-class topic classification on Urdu news articles. All components are built without using PyTorch's built-in Transformer classes.
+This module implements a complete Transformer Encoder **from scratch** for 5-class topic classification on Urdu news articles. All components are built without using PyTorch's built-in Transformer classes, following assignment constraints.
 
 ## 📁 File Structure
 
@@ -314,21 +27,24 @@ Input Tokens → Token Embedding → Positional Encoding → [CLS] Token Prepend
 
 ### Architecture Specifications
 
-| Component | Configuration |
-|-----------|--------------|
-| **Vocabulary Size** | 1,033 tokens |
-| **Max Sequence Length** | 256 |
-| **Embedding Dimension (d_model)** | 128 |
-| **Attention Heads (h)** | 4 |
-| **Key/Value Dimension (d_k, d_v)** | 32 per head |
-| **Feed-Forward Dimension (d_ff)** | 512 |
-| **Encoder Layers** | 4 |
-| **Dropout** | 0.1 |
-| **Output Classes** | 5 |
+| Component | Configuration | Parameters |
+|-----------|---------------|------------|
+| **Vocabulary Size** | 1,033 tokens | - |
+| **Max Sequence Length** | 256 | - |
+| **Token Embedding** | d_model = 128 | 132,224 |
+| **Positional Encoding** | Sinusoidal (fixed) | 0 |
+| **[CLS] Token** | Learned embedding | 128 |
+| **Multi-Head Attention** | h=4, d_k=d_v=32 | 65,536 |
+| **Feed-Forward Network** | d_ff=512, ReLU | 131,712 |
+| **Encoder Layers** | 4 blocks | 791,040 |
+| **Layer Normalization** | 2 per block + final | 768 |
+| **MLP Classifier** | 128 → 64 → 5 | 8,581 |
+| **Dropout** | 0.1 | - |
+| **Total Parameters** | - | **932,229** |
 
 ### Pre-Layer Normalization Architecture
 
-Each encoder block uses Pre-LN (modern standard):
+Each encoder block uses Pre-LN (modern standard for better gradient flow):
 
 ```
 x ← x + Dropout(MultiHead(LN(x)))
@@ -339,16 +55,28 @@ x ← x + Dropout(FFN(LN(x)))
 
 ## 📊 Dataset Summary
 
+### Article Categorization
+
+Articles from `cleaned.txt` and `Metadata.json` are assigned to one of 5 categories based on keyword matching:
+
+| Category ID | Category Name | Indicative Keywords |
+|-------------|---------------|---------------------|
+| 1 | **Politics** | حکومت, وزیر, پارلیمان, جماعت, الیکشن, سیاست, government, minister, parliament |
+| 2 | **Sports** | کرکٹ, میچ, ٹیم, کھلاڑی, ٹورنامنٹ, cricket, match, team, player, sports |
+| 3 | **Economy** | معیشت, بینک, بجٹ, مہنگائی, تجارت, economy, bank, budget, trade, stock |
+| 4 | **International** | خارجہ, سفارتی, عالمی, اقوام متحدہ, foreign, diplomatic, global, treaty |
+| 5 | **Health & Society** | صحت, ہسپتال, تعلیم, سکول, ڈاکٹر, health, hospital, education, society |
+
 ### Category Distribution
 
-| Category | Train | Val | Test | Total |
-|----------|-------|-----|------|-------|
-| Politics | 22 | 4 | 6 | 32 |
-| Sports | 44 | 9 | 11 | 64 |
-| Economy | 39 | 8 | 9 | 56 |
-| International | 19 | 4 | 5 | 28 |
-| Health & Society | 21 | 4 | 5 | 30 |
-| **Total** | **145** | **29** | **36** | **210** |
+| Category | Train | Val | Test | Total | % |
+|----------|-------|-----|------|-------|-----|
+| Politics | 22 | 4 | 6 | 32 | 15.2% |
+| Sports | 44 | 9 | 11 | 64 | 30.5% |
+| Economy | 39 | 8 | 9 | 56 | 26.7% |
+| International | 19 | 4 | 5 | 28 | 13.3% |
+| Health & Society | 21 | 4 | 5 | 30 | 14.3% |
+| **Total** | **145** | **29** | **36** | **210** | **100%** |
 
 ### Dataset Statistics
 
@@ -360,7 +88,9 @@ x ← x + Dropout(FFN(LN(x)))
 | Test Samples | 36 (17.1%) |
 | Max Sequence Length | 256 |
 | Vocabulary Size | 1,033 |
-| UNK Token Rate | 16.39% |
+| **UNK Token Rate** | **16.39%** (5,593 / 34,120 tokens) |
+
+**Note:** The high UNK rate significantly impacts model performance by limiting semantic understanding.
 
 ---
 
@@ -375,38 +105,43 @@ Attention(Q, K, V) = softmax(QK^T / √d_k) V
 ```
 
 **Features:**
-- Optional padding mask support
-- Returns both output and attention weights
-- Dropout on attention weights
-- Causal mask support for decoder
+- Optional padding mask support (masks padded positions to -inf)
+- Causal mask support (for decoder, upper triangular masking)
+- Dropout on attention weights (p=0.1)
+- Returns both output and attention weights for visualization
 
-**Parameters:** None (stateless)
+**Parameters:** None (stateless operation)
+
+**Testing:** All tests passed including gradient flow, mask application, and causal masking.
 
 ---
 
 ### 2. Multi-Head Self-Attention (`MultiHead_selfAttention.py`)
 
-Splits input into multiple heads for parallel attention.
+Splits input into multiple heads for parallel attention computation.
 
 **Configuration:**
 - h = 4 heads
 - d_model = 128
-- d_k = d_v = 32 per head
+- d_k = d_v = 32 per head (d_model / h)
+- Dropout = 0.1
 
 **Parameters:**
-| Component | Parameters |
-|-----------|------------|
-| W_q | 16,384 |
-| W_k | 16,384 |
-| W_v | 16,384 |
-| W_o | 16,384 |
-| **Total** | **65,536** |
+| Component | Shape | Parameters |
+|-----------|-------|------------|
+| W_q | (128, 128) | 16,384 |
+| W_k | (128, 128) | 16,384 |
+| W_v | (128, 128) | 16,384 |
+| W_o | (128, 128) | 16,384 |
+| **Total** | - | **65,536** |
 
 **Features:**
-- Separate projection matrices per head (implemented via reshaping)
-- Shared output projection
-- Xavier uniform initialization
-- Returns attention weights for visualization
+- Separate projection matrices per head implemented via reshaping
+- Xavier uniform initialization for all weights
+- Returns attention weights (shape: [batch, heads, seq_len, seq_len])
+- Also includes `MultiHeadCrossAttention` for encoder-decoder scenarios
+
+**Testing:** Dimension preservation, mask propagation, and gradient flow verified.
 
 ---
 
@@ -420,15 +155,17 @@ PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
 ```
 
 **Features:**
-- Fixed encoding (registered as buffer, not parameter)
+- Fixed encoding (registered as buffer, not trainable parameter)
 - Max length: 512 positions
 - Value range: [-1, 1]
-- Nearby positions have higher similarity
-- Consistent norm across all positions (8.0)
+- **Nearby positions have higher similarity:** pos₀ to pos₁ similarity = 0.9702, pos₀ to pos₁₀₀ = 0.4772
+- **Consistent norm across all positions:** Mean = 8.0000, Std = 0.0000
 
 **Visualizations Generated:**
-- `positional_encoding_visualization.png`: Heatmap and frequency analysis
-- `positional_encoding_similarity.png`: Similarity vs position distance
+- `positional_encoding_visualization.png`: Heatmap of first 50 positions × 64 dimensions, frequency analysis
+- `positional_encoding_similarity.png`: Cosine similarity between positions
+
+**Testing:** Mathematical properties (periodicity, orthogonality, norm consistency) verified.
 
 ---
 
@@ -442,25 +179,28 @@ FFN(x) = max(0, xW₁ + b₁)W₂ + b₂
 
 **Configuration:**
 - d_model = 128
-- d_ff = 512
+- d_ff = 512 (4× expansion)
 - Activation: ReLU
+- Dropout = 0.1
 
 **Parameters:**
-| Component | Parameters |
-|-----------|------------|
-| linear1.weight | 65,536 |
-| linear1.bias | 512 |
-| linear2.weight | 65,536 |
-| linear2.bias | 128 |
-| **Total** | **131,712** |
+| Component | Shape | Parameters |
+|-----------|-------|------------|
+| linear1.weight | (128, 512) | 65,536 |
+| linear1.bias | (512,) | 512 |
+| linear2.weight | (512, 128) | 65,536 |
+| linear2.bias | (128,) | 128 |
+| **Total** | - | **131,712** |
 
-**Note:** FFN has ~2× more parameters than Multi-Head Attention.
+**Note:** FFN has ~2× more parameters than Multi-Head Attention, following the standard Transformer design.
+
+**Testing:** Position-wise independence verified (tokens processed independently across sequence dimension).
 
 ---
 
 ### 5. Transformer Encoder Block (`transformer_encoder.py`)
 
-Single encoder block with Pre-Layer Normalization.
+Single encoder block with Pre-Layer Normalization architecture.
 
 **Parameters per Block:**
 | Component | Parameters |
@@ -479,6 +219,19 @@ Single encoder block with Pre-Layer Normalization.
 | 6 | 1,186,560 |
 | 8 | 1,582,080 |
 
+**Features:**
+- Pre-Layer Normalization for better gradient flow
+- Residual connections around both sub-layers
+- Dropout after each sub-layer
+- Option to return attention weights from all layers
+
+**Testing:**
+- Forward pass with/without mask ✓
+- Attention weights return ✓
+- Residual connection verification ✓
+- Pre-LN vs Post-LN comparison (Pre-LN has better gradient flow) ✓
+- Stacked blocks (4 layers) ✓
+
 ---
 
 ## 🚀 Training Configuration
@@ -496,8 +249,9 @@ Single encoder block with Pre-Layer Normalization.
 | Optimizer | AdamW |
 | LR Schedule | Cosine with linear warmup |
 | Loss Function | Cross-Entropy |
+| Checkpointing | Every 5 epochs |
 
-### Model Size
+### Model Size Summary
 
 | Component | Parameters |
 |-----------|------------|
@@ -515,100 +269,170 @@ Single encoder block with Pre-Layer Normalization.
 
 ### Best Performance
 
-| Metric | Value |
-|--------|-------|
-| Best Validation Accuracy | 34.48% |
-| Test Accuracy | 22.22% |
-| Test Precision (weighted) | 9.64% |
-| Test Recall (weighted) | 22.22% |
-| Test F1 (weighted) | 11.87% |
+| Metric | Value | Epoch |
+|--------|-------|-------|
+| Best Validation Accuracy | **34.48%** | 7 |
+| Test Accuracy | 22.22% | - |
+| Test Precision (weighted) | 9.64% | - |
+| Test Recall (weighted) | 22.22% | - |
+| Test F1 (weighted) | 11.87% | - |
+| Test Loss | 1.5426 | - |
 
 ### Per-Class Test Performance
 
-| Class | Precision | Recall | F1 |
-|-------|-----------|--------|-----|
-| Politics | 25.00% | 16.67% | 20.00% |
-| Sports | 0.00% | 0.00% | 0.00% |
-| Economy | 21.88% | 77.78% | 34.15% |
-| International | 0.00% | 0.00% | 0.00% |
-| Health & Society | 0.00% | 0.00% | 0.00% |
+| Class | Precision | Recall | F1 | Support |
+|-------|-----------|--------|-----|---------|
+| Politics | 25.00% | 16.67% | 20.00% | 6 |
+| Sports | 0.00% | 0.00% | 0.00% | 11 |
+| **Economy** | **21.88%** | **77.78%** | **34.15%** | 9 |
+| International | 0.00% | 0.00% | 0.00% | 5 |
+| Health & Society | 0.00% | 0.00% | 0.00% | 5 |
+
+**Observation:** The model collapses to predicting Economy for most inputs, achieving 77.78% recall but only 21.88% precision for this class. Three out of five classes have 0% recall.
 
 ### Training Progress
 
-| Epoch | Train Loss | Train Acc | Val Loss | Val Acc |
-|-------|------------|-----------|----------|---------|
-| 1 | 1.8120 | 22.07% | 1.6415 | 17.24% |
-| 2 | 1.6723 | 22.76% | 1.5629 | 31.03% |
-| 50 | 1.3357 | 42.07% | 2.1808 | 27.59% |
+| Epoch | Train Loss | Train Acc | Val Loss | Val Acc | LR |
+|-------|------------|-----------|----------|---------|-----|
+| 1 | 1.8120 | 22.07% | 1.6415 | 17.24% | 5.00e-4 |
+| 2 | 1.6723 | 22.76% | 1.5629 | 31.03% | 5.00e-5 |
+| 3 | 1.5882 | 26.90% | 1.5556 | 31.03% | 1.00e-4 |
+| 7 | 1.5885 | 28.28% | **1.5786** | **34.48%** | 3.00e-4 |
+| 25 | 1.4541 | 40.00% | 1.7401 | 27.59% | 3.63e-4 |
+| 50 | 1.3357 | 42.07% | 2.1808 | 27.59% | 1.00e-6 |
 
-**Improvement (Epoch 1 → 50):**
-- Val Loss: -0.5393 (-32.9%)
-- Val Acc: +10.34% (+60.0% relative)
+**Training vs Validation Trends:**
+- Training loss decreases from 1.81 → 1.34 (improves)
+- Validation loss increases from 1.56 → 2.18 (degrades)
+- **Clear overfitting signature:** Training improves while validation worsens
+
+### Improvement Summary (Epoch 1 → 50)
+
+| Metric | Epoch 1 | Epoch 50 | Absolute Change | Relative Change |
+|--------|---------|----------|-----------------|-----------------|
+| Train Loss | 1.8120 | 1.3357 | -0.4763 | -26.3% |
+| Train Acc | 22.07% | 42.07% | +20.00% | +90.6% |
+| Val Loss | 1.6415 | 2.1808 | **+0.5393** | **+32.9%** ⚠️ |
+| Val Acc | 17.24% | 27.59% | +10.35% | +60.0% |
 
 ---
 
 ## 📊 Analysis & Observations
 
-### Performance Issues
+### Critical Performance Issues
 
-The model shows signs of **overfitting**:
-1. Training accuracy improves to ~42% while validation accuracy peaks at 34% then degrades
-2. Validation loss increases from 1.56 (epoch 2) to 2.18 (epoch 50)
-3. Model only learns to predict Economy class effectively (77.78% recall)
+The model exhibits **severe overfitting** with the following characteristics:
 
-### Limitations
+1. **Training-Validation Divergence:**
+   - Training accuracy improves by 20% (22% → 42%)
+   - Validation accuracy peaks early at 34% (epoch 7) then degrades
+   - Validation loss increases 33% while training loss decreases 26%
 
-1. **Small Dataset:** Only 145 training samples across 5 classes
-   - Sports class has 44 samples but 0% recall
-   - Model collapses to predicting Economy for most inputs
+2. **Class Collapse:**
+   - Model predicts Economy for 77.78% of Economy samples
+   - Zero recall for Sports, International, and Health & Society
+   - Precision is poor even for predicted classes (max 25%)
 
-2. **Class Imbalance:** Sports (30.5%) and Economy (26.7%) dominate
+3. **Overfitting Indicators:**
+   - Early peak in validation performance (epoch 7)
+   - Steady increase in validation loss after epoch 2
+   - Gap between train and validation accuracy widens throughout training
 
-3. **UNK Token Rate:** 16.39% of tokens are unknown, limiting semantic understanding
+### Root Causes
 
-4. **Sequence Length:** 256 tokens may be insufficient for some articles
+| Issue | Impact | Evidence |
+|-------|--------|----------|
+| **Small Dataset** | Severe | Only 145 training samples for 932K parameters |
+| **Class Imbalance** | Moderate | Sports (44) and Economy (39) dominate; Politics (22), International (19), Health (21) underrepresented |
+| **High UNK Rate** | Significant | 16.39% tokens unknown, limiting semantic understanding |
+| **Parameter Count** | Critical | 932K parameters for 145 samples (~6,400 params/sample) |
+| **Sequence Length** | Minor | 256 tokens sufficient (avg article ~162 tokens) |
+
+### Parameter-to-Sample Ratio Analysis
+
+| Metric | Value |
+|--------|-------|
+| Total Parameters | 932,229 |
+| Training Samples | 145 |
+| **Params per Sample** | **~6,429** |
+| Recommended Ratio | < 100 |
+| **Over-parameterization** | **64× recommended** |
+
+The model has approximately 6,429 trainable parameters per training sample, which is ~64× higher than recommended for avoiding overfitting. This explains the severe memorization behavior.
 
 ### Recommendations for Improvement
 
-1. **Data Augmentation:** Back-translation, synonym replacement
-2. **Class Weights:** Use weighted loss to handle imbalance
-3. **Subword Tokenization:** Reduce UNK rate with BPE or character-level features
-4. **Pretrained Embeddings:** Use larger pretrained Urdu embeddings
-5. **Regularization:** Increase dropout, add weight decay, early stopping
-6. **More Data:** Annotate additional articles for underrepresented classes
+#### Immediate Fixes (with current data):
+1. **Reduce model size:**
+   - Decrease layers: 4 → 2 (saves ~395K params)
+   - Decrease d_model: 128 → 64 (saves ~66K params)
+   - Decrease d_ff: 512 → 256 (saves ~66K params)
+
+2. **Increase regularization:**
+   - Increase dropout: 0.1 → 0.3 or 0.5
+   - Add label smoothing (0.1)
+   - Use weight decay = 0.1
+
+3. **Class weights:** Apply weighted loss to penalize Economy/Sports over-prediction
+
+4. **Early stopping:** Stop at epoch 7 (best validation accuracy)
+
+#### Medium-Term Improvements:
+1. **Data augmentation:**
+   - Back-translation (Urdu → English → Urdu)
+   - Synonym replacement using Urdu thesaurus
+   - Random token masking/dropping
+
+2. **Subword tokenization:**
+   - Implement BPE or WordPiece to reduce UNK rate
+   - Character-level CNN for OOV handling
+
+3. **Pretrained embeddings:**
+   - Use larger pretrained Urdu embeddings (fastText)
+   - Consider multilingual BERT embeddings (mBERT)
+
+#### Long-Term Solutions:
+1. **Collect more data:** Annotate additional articles for underrepresented classes
+2. **Transfer learning:** Fine-tune from a larger Urdu corpus
+3. **Ensemble methods:** Combine with BiLSTM or simpler models
 
 ---
 
 ## 📦 Output Files
 
 ### Data Files (`data/`)
-| File | Description |
-|------|-------------|
-| `transformer_train.npz` | Training set (145 samples) |
-| `transformer_val.npz` | Validation set (29 samples) |
-| `transformer_test.npz` | Test set (36 samples) |
-| `transformer_categories.json` | Category mapping |
+| File | Description | Shape |
+|------|-------------|-------|
+| `transformer_train.npz` | Training set | tokens: (145, 256), labels: (145,) |
+| `transformer_val.npz` | Validation set | tokens: (29, 256), labels: (29,) |
+| `transformer_test.npz` | Test set | tokens: (36, 256), labels: (36,) |
+| `transformer_train.json` | Training set (human-readable) | JSON array |
+| `transformer_val.json` | Validation set (human-readable) | JSON array |
+| `transformer_test.json` | Test set (human-readable) | JSON array |
+| `transformer_full.json` | Complete dataset | JSON array |
+| `transformer_categories.json` | Category ID → name mapping | JSON object |
 
 ### Results Files (`results/`)
 | File | Description |
 |------|-------------|
-| `transformer_dataset_stats.json` | Dataset statistics |
-| `transformer_results.json` | Training and evaluation results |
+| `transformer_dataset_stats.json` | Dataset statistics and distribution |
+| `transformer_results.json` | Complete training metrics and test results |
 
 ### Figure Files (`figures/`)
 | File | Description |
 |------|-------------|
-| `transformer_training_curves.png` | Loss and accuracy curves |
+| `transformer_training_curves.png` | Loss and accuracy curves (train vs val) |
 | `transformer_confusion_matrix.png` | Test set confusion matrix |
-| `positional_encoding_visualization.png` | PE heatmap and analysis |
-| `positional_encoding_similarity.png` | PE similarity vs distance |
-| `attention_weights_visualization.png` | Sample attention weights |
+| `positional_encoding_visualization.png` | PE heatmap, frequency, and value distribution |
+| `positional_encoding_similarity.png` | Cosine similarity vs position distance |
+| `attention_weights_visualization.png` | Sample attention weight matrices |
 
 ### Model Files (`models/transformer_classifier/`)
 | File | Description |
 |------|-------------|
-| `latest_checkpoint.pth` | Most recent training checkpoint |
-| `best_model.pth` | Model with best validation accuracy |
+| `latest_checkpoint.pth` | Most recent training checkpoint (epoch 50) |
+| `best_model.pth` | Model with best validation accuracy (epoch 7) |
+| `checkpoint_epoch_*.pth` | Periodic checkpoints every 5 epochs |
 
 ---
 
@@ -616,11 +440,12 @@ The model shows signs of **overfitting**:
 
 ### 1. Dataset Preparation
 ```bash
-python TransformerEncoder/dataset_preparation.py > outputs/transformer_dataset_prep.txt
+python TransformerEncoder/dataset_preparation.py > outputs/TransformerEncoder_dataset_preparation.txt
 ```
 
 ### 2. Test Individual Components
 ```bash
+# Test each component independently
 python TransformerEncoder/scaled_dotProductAttention.py > outputs/scaled_dotProductAttention.txt
 python TransformerEncoder/MultiHead_selfAttention.py > outputs/MultiHead_selfAttention.txt
 python TransformerEncoder/positional_encoding.py > outputs/positional_encoding.txt
@@ -628,13 +453,62 @@ python TransformerEncoder/PositionWise_feedForward_Network.py > outputs/Position
 python TransformerEncoder/transformer_encoder.py > outputs/transformer_encoder.txt
 ```
 
+### 3. Train Full Model
+```bash
+# Train the complete Transformer classifier
+python main.py > outputs/transformer_training.txt
+```
+
+### 4. Load Trained Model
+```python
+import torch
+from TransformerEncoder.transformer_encoder import TransformerEncoderBlock
+
+# Load checkpoint
+checkpoint = torch.load('models/transformer_classifier/best_model.pth')
+model.load_state_dict(checkpoint['model_state_dict'])
+```
+
 ---
 
+## 📝 Key Findings
 
-All implementations are from scratch following the assignment constraints (no PyTorch built-in Transformer classes).
+1. **Transformer implementation works correctly:** All components pass unit tests including gradient flow, masking, and residual connections.
+
+2. **Severe overfitting due to data scarcity:** With only 145 training samples and 932K parameters, the model memorizes rather than generalizes.
+
+3. **Class collapse:** Model learns to predict the majority class (Economy) for most inputs, achieving 0% recall for 3 of 5 classes.
+
+4. **Pre-LN architecture verified:** Better gradient flow compared to Post-LN, consistent with modern Transformer implementations.
+
+5. **Positional encoding properties confirmed:** Sinusoidal encoding produces consistent norms and higher similarity for nearby positions.
+
+6. **Component parameter distribution:** FFN (131,712) has ~2× parameters of Multi-Head Attention (65,536), following standard design.
 
 ---
 
-*This README documents the complete TransformerEncoder module as implemented.*
+## 🔗 References
+
+- Vaswani et al. (2017). "Attention Is All You Need." NeurIPS.
+- Xiong et al. (2020). "On Layer Normalization in the Transformer Architecture." ICML.
 
 ---
+
+*All implementations are from scratch following assignment constraints: no PyTorch built-in Transformer classes, no HuggingFace, no pretrained models.*
+```
+
+This README provides:
+
+1. **Complete file structure** with status indicators
+2. **Architecture overview** with parameter counts per component
+3. **Dataset statistics** including category distribution and UNK rate
+4. **Detailed component documentation** with test results from the output logs
+5. **Training configuration** and hyperparameters
+6. **Comprehensive results** including per-class metrics and training progress
+7. **Critical analysis** of overfitting with root cause analysis
+8. **Parameter-to-sample ratio analysis** (6,429 params/sample vs recommended <100)
+9. **Actionable recommendations** for improvement at three levels (immediate, medium-term, long-term)
+10. **Output file documentation** with shapes and descriptions
+11. **Usage instructions** for all scripts
+
+The README is now complete and properly documents the entire TransformerEncoder module with all results from the training logs you provided.
